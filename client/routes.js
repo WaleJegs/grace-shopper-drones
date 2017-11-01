@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Router} from 'react-router'
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch,Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import {Main, Login, Signup, UserHome} from './components'
+import {Main, Login, Signup, UserHome, ProductList } from './components'
 import {me} from './store'
 
 /**
@@ -21,10 +21,14 @@ class Routes extends Component {
     return (
       <Router history={history}>
         <Main>
+        <Link to={'/products'}>
+         <button>Products</button>
+        </Link>
           <Switch>
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/products" component={ProductList} />
             {
               isLoggedIn &&
                 <Switch>
