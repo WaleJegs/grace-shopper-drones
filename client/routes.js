@@ -4,9 +4,9 @@ import {Router} from 'react-router'
 import {Route, Switch,Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import {Main, Login, Signup, UserHome, ProductList } from './components'
+import {Main, Login, Signup, UserHome} from './components'
 import {me} from './store'
-
+import  ProductList  from "./components/productList"
 /**
  * COMPONENT
  */
@@ -19,6 +19,7 @@ class Routes extends Component {
     const {isLoggedIn} = this.props
 
     return (
+      <div>
       <Router history={history}>
         <Main>
         <Link to={'/products'}>
@@ -41,6 +42,7 @@ class Routes extends Component {
           </Switch>
         </Main>
       </Router>
+      </div>
     )
   }
 }

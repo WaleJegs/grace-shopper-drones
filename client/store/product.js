@@ -12,9 +12,10 @@ export function getProductList(productList){
 //THUNK CREATORS
 export function fetchProductList(){
     return function thunk(dispatch){
-        return axios.get('/api/products')
+        axios.get('/api/products')
             .then(res => res.data)
             .then(products => {
+                console.log(products)
                 const action = getProductList(products)
                 dispatch(action)
             });
