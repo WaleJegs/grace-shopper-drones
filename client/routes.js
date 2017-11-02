@@ -7,6 +7,7 @@ import history from './history'
 import {Main, Login, Signup, UserHome} from './components'
 import {me} from './store'
 import  ProductList  from "./components/productList"
+import pList from "./components/pLIst"
 /**
  * COMPONENT
  */

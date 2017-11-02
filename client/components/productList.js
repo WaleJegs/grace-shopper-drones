@@ -23,10 +23,11 @@ class productList extends Component{
                 this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
                     return (
                     <div key= {product.id}>
-                      <Link to={`/product/${id}`}>
-                        <li style={{backgroundImage: `url(${product.picture && product.picture})`}}>
-                        {product.name + ' ' + product.price}
+                      <Link to={`/product/${product.id}`}>
+                        <li >
+                        {"Product Name: " + product.name + ' ' +"Product Price: " +product.price}
                         </li>
+                        <img src={product.picture} />
                       </Link>
                     </div>)
                 })
@@ -38,7 +39,7 @@ class productList extends Component{
 
 
 const mapStateToProps = state => {
-   return { listOfProducts: state.listOfProducts }
+   return { listOfProducts: state.product }
 }
 
 const mapDispatchToProps = ({fetchProductList})
