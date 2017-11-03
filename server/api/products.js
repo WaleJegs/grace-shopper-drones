@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Product } = require('../db/models')
+const { Cart, Product } = require('../db/models')
 module.exports = router
 
 router.get('/', (req, res, next) => {
@@ -11,6 +11,7 @@ router.get('/', (req, res, next) => {
 router.get('/:productId', (req, res, next) => {
     Product.findById(req.params.productId)
         .then((product) => {
+            console.log('session', req.session)
             res.json(product)
         })
         .catch(next);
