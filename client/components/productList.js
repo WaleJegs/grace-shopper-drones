@@ -10,20 +10,18 @@ class productList extends Component{
     }
     
     componentDidMount(){
-        console.log("mounting")
       this.props.fetchProductList()   
     }
 
 
     render(){
-        console.log("fectch:",this.props.fetchProductList,"this.props:",this.props)
         return (
             <div>
             {
                 this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
                     return (
                     <div key= {product.id}>
-                      <Link to={`/product/${product.id}`}>
+                      <Link to={`/products/${product.id}`}>
                         <li >
                         {"Product Name: " + product.name + ' ' +"Product Price: " +product.price}
                         </li>
@@ -39,7 +37,7 @@ class productList extends Component{
 
 
 const mapStateToProps = state => {
-   return { listOfProducts: state.product }
+   return { listOfProducts: state.product.products }
 }
 
 const mapDispatchToProps = ({fetchProductList})

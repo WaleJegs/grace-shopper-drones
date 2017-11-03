@@ -8,6 +8,7 @@ import {Main, Login, Signup, UserHome} from './components'
 import {me} from './store'
 import  ProductList  from "./components/productList"
 import pList from "./components/pLIst"
+import SingleProduct from './components/singleProduct'
 /**
  * COMPONENT
  */
@@ -30,7 +31,8 @@ class Routes extends Component {
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            <Route path="/products" component={ProductList} />
+            <Route exact path="/products" component={ProductList} />
+            <Route path="/products/:productId" component={ SingleProduct} />
             {
               isLoggedIn &&
                 <Switch>
