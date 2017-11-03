@@ -7,12 +7,15 @@ import {fetchProductList} from '../store/product'
 class productList extends Component{
     constructor(props){
         super(props)
+
+
     }
     
     componentDidMount(){
       this.props.fetchProductList()   
     }
 
+   
 
     render(){
         return (
@@ -27,6 +30,7 @@ class productList extends Component{
                         </li>
                         <img src={product.picture} />
                       </Link>
+                     
                     </div>)
                 })
             }

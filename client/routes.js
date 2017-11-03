@@ -9,6 +9,7 @@ import {me} from './store'
 import  ProductList  from "./components/productList"
 import pList from "./components/pLIst"
 import SingleProduct from './components/singleProduct'
+import Cart from './components/cart'
 /**
  * COMPONENT
  */
@@ -27,12 +28,16 @@ class Routes extends Component {
         <Link to={'/products'}>
          <button>Products</button>
         </Link>
+        <Link to={'/cart'}>
+        <button >Cart</button>
+        </Link>
           <Switch>
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route exact path="/products" component={ProductList} />
             <Route path="/products/:productId" component={ SingleProduct} />
+            <Route path="/cart" component={Cart} />
             {
               isLoggedIn &&
                 <Switch>
