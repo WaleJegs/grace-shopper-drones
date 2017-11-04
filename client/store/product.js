@@ -2,10 +2,11 @@ import axios from 'axios'
 
 //ACTION TYPES
 const GET_PRODUCT_LIST = "GET_PRODUCT_LIST"
-const ADD_PRODUCT="ADD_PRODUCT"
-const DELETE_PRODUCT="DELETE_PRODUCT"
-const GET_SINGLE_PRODUCT="GET_SINGLE_PRODUCT"
-const ADD_TO_CART="ADD_TO_CART"
+const ADD_PRODUCT = "ADD_PRODUCT"
+const DELETE_PRODUCT = "DELETE_PRODUCT"
+const GET_SINGLE_PRODUCT = "GET_SINGLE_PRODUCT"
+const ADD_TO_CART = "ADD_TO_CART"
+const CHECKOUT = 'CHECKOUT'
 
 
 const initialState = {
@@ -16,34 +17,53 @@ const initialState = {
 }
 
 //ACTION CREATORS
-export function getProductList(productList){
-    const action = {type: GET_PRODUCT_LIST, productList };
+export function checkout(cart) {
+    const action = { type: CHECKOUT, cart }
+    return action;
+}
+export function getProductList(productList) {
+    const action = { type: GET_PRODUCT_LIST, productList };
     return action;
 }
 
-export function getSingleProduct(product){
-    const action = { type: GET_SINGLE_PRODUCT, product}
+export function getSingleProduct(product) {
+    const action = { type: GET_SINGLE_PRODUCT, product }
     return action;
 }
 
-export function addProduct(newProduct){
-    const action = { type: ADD_PRODUCT, newProduct}
+export function addProduct(newProduct) {
+    const action = { type: ADD_PRODUCT, newProduct }
     return action;
 }
 
-export function deleteProduct(product){
+export function deleteProduct(product) {
     const action = { type: DELETE_PRODUCT, product }
     return action;
 }
 
-export function addToCart(product){
+export function addToCart(product) {
     const action = { type: ADD_TO_CART, product }
     return action;
 }
 
 //THUNK CREATORS
-export function fetchProductList(){
-    return function thunk(dispatch){
+export function checkoutCart(cart, userId) {
+    var result = {}
+    cart.map(product => result[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
+
+    return function thunk(dispatch) {
+        return axios.post(`/api/users/${userId}/cart`, result)
+            .then(res => res.data)
+            .then(() => {
+                const action = checkout([]);
+                dispatch(action)
+            });
+    }
+}
+
+
+export function fetchProductList() {
+    return function thunk(dispatch) {
         return axios.get('/api/products')
             .then(res => res.data)
             .then(products => {
@@ -53,15 +73,15 @@ export function fetchProductList(){
     }
 }
 
-export function addToCartAction(product){
-    return function (dispatch){
+export function addToCartAction(product) {
+    return function(dispatch) {
         const action = addToCart(product)
         dispatch(action)
     }
 }
 
-export function getSingleProductThunk(productId){
-    return function thunk(dispatch){
+export function getSingleProductThunk(productId) {
+    return function thunk(dispatch) {
         return axios.get(`/api/products/${productId}`)
             .then(res => res.data)
             .then(singleProduct => {
@@ -71,8 +91,8 @@ export function getSingleProductThunk(productId){
     }
 }
 
-export function addProductThunk(product){
-    return function thunk(dispatch){
+export function addProductThunk(product) {
+    return function thunk(dispatch) {
         return axios.post('/api/products/', product)
             .then(res => res.data)
             .then(newProduct => {
@@ -82,36 +102,37 @@ export function addProductThunk(product){
     }
 }
 
-export function deleteProductThunk(productId){
-    return function thunk(dispatch){
+export function deleteProductThunk(productId) {
+    return function thunk(dispatch) {
         return axios.delete(`/api/products/${productId}`)
-        .then(res => res.data)
-        .then(deletedProduct => {
-            const action = deleteProduct(deletedProduct)
-            dispatch(action)
-        })
+            .then(res => res.data)
+            .then(deletedProduct => {
+                const action = deleteProduct(deletedProduct)
+                dispatch(action)
+            })
     }
 }
 
 //REDUCER
-export default function reducer( state = initialState, action){
+export default function reducer(state = initialState, action) {
 
-    switch (action.type){
+    switch (action.type) {
+        case CHECKOUT:
+            return Object.assign({}, state, { cart: action.cart })
 
         case ADD_TO_CART:
-        return Object.assign({}, state, {cart: [...state.cart, action.product]} );
+            return Object.assign({}, state, { cart: [...state.cart, action.product] });
 
         case GET_PRODUCT_LIST:
-            return Object.assign({}, state, {products: action.productList});
-        
+            return Object.assign({}, state, { products: action.productList });
+
         case ADD_PRODUCT:
-            return Object.assign({}, state, {newProduct: action.newProduct})
+            return Object.assign({}, state, { newProduct: action.newProduct })
 
         case GET_SINGLE_PRODUCT:
-            return  Object.assign({}, state, {singleProduct: action.product})
+            return Object.assign({}, state, { singleProduct: action.product })
 
         default:
             return state
     }
 }
-

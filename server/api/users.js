@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User, Product, Order, OrderProduct } = require('../db/models')
+const { User, Product, Order } = require('../db/models')
 module.exports = router
 
 router.get('/', (req, res, next) => {
@@ -53,7 +53,8 @@ router.delete('/:userId', (req, res, next) => {
 
 router.post('/:userId/cart', (req, res, next) => {
     Order.create({
-            userId: req.params.userId
+            userId: req.params.userId,
+            status: 'paid'
         })
         .then(order => {
             return Product.findAll({

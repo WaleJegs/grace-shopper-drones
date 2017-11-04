@@ -5,6 +5,10 @@ const Order = db.define('order', {
     userId: {
         type: Sequelize.INTEGER,
         defaultValue: null
+    },
+    status: {
+        type: Sequelize.STRING,
+        defaultValue: 'pending'
     }
 })
 

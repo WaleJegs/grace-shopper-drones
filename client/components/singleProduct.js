@@ -9,12 +9,16 @@ class SingleProduct extends Component{
     }
 
     componentDidMount(){
-        this.props.getSingleProductThunk(parseInt(this.props.match.params.productId))  
+        this.props.getSingleProductThunk(parseInt(this.props.match.params.productId))
       }
 
     handleClick(e){
         if (!window.localStorage.getItem("cart")){
+<<<<<<< HEAD
             window.localStorage.setItem("cart", "next"+"-"+this.props.singleProduct.id+"-"+this.props.singleProduct.price+"-"+this.props.singleProduct.name)
+=======
+            window.localStorage.setItem("cart", "next-"+this.props.singleProduct.id+"-"+this.props.singleProduct.price+"-"+this.props.singleProduct.name)
+>>>>>>> cdc862ded3d962b8124350109e538d71b8e41a57
             this.props.addToCartAction(window.localStorage.getItem('cart').split('-')[0])
             console.log(window.localStorage.getItem("cart"))
         } else {
@@ -24,14 +28,14 @@ class SingleProduct extends Component{
         }
     }
     render(){
-        
-        const product=this.props.singleProduct
+
+        const product = this.props.singleProduct
 
 
-        return(
+        return (
         <div>
             {
-              "name: "+ product.name + " price: "+product.price + " description :"+ product.description 
+              "name: " + product.name + " price: "+product.price + " description :"+ product.description
             }
               <img src={product.picture} />
               <button onClick={this.handleClick}>Add To Cart </button>
@@ -46,8 +50,7 @@ class SingleProduct extends Component{
 const mapStateToProps = state => {
     return { singleProduct: state.product.singleProduct, cart: state.product.cart}
  }
- 
+
  const mapDispatchToProps = ({getSingleProductThunk, addToCartAction})
- 
+
  export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
- 
