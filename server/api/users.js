@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { User, Product, Cart } = require('../db/models')
+const { User, Product, Order, OrderProduct } = require('../db/models')
 module.exports = router
 
 router.get('/', (req, res, next) => {
@@ -51,20 +51,26 @@ router.delete('/:userId', (req, res, next) => {
         .catch(next);
 });
 
-// router.post('/:userId/cart/:productId', (req, res, next) => {
-//     let cart = [Product.findById(req.params.productId), User.findById(req.params.userId)]
-//     Cart.create({
-//       where: {
-//         sessionId: this.id
-//       }
-//     })
-//     .then(cart => {
-//       req.session.id = cart.id
-//     })
-//     .then
-//     Promise.all(cart)
-//       .then([product, user] => {
-
-//         })
-//       })
-// })
+router.post('/:userId/cart', (req, res, next) => {
+    Order.create({
+            userId: req.params.userId
+        })
+        .then(order => {
+            return Product.findAll({
+                    where: {
+                        id: {
+                            $in: Object.keys(req.body).map(key => parseInt(key))
+                        }
+                    }
+                })
+                .then(products => {
+                    return products.map(pro => order.addProduct(pro, { through: { quantity: req.body[pro.id], price: pro.price, userId: req.params.userId } }))
+                })
+                .then(ops => {
+                    return Promise.all(ops)
+                })
+        })
+        .then(orderProducts => {
+            res.json(orderProducts)
+        })
+})

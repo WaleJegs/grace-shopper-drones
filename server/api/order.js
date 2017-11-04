@@ -1,7 +1,7 @@
 const router = require('express').Router()
-module.exports = router
+module.exports = router;
 
-import { OrderProduct, Order } from '../db/models';
+const { OrderProduct, Order, Product } = require('../db/models');
 
 router.get('/', (req, res, next) => {
     Order.findAll({})
@@ -23,7 +23,7 @@ router.get('/:orderId', (req, res, next) => {
         .catch(next);
 })
 
-router.post('/', (req, res, next) => {
+router.post('/:checkout', (req, res, next) => {
     Order.create({
             userId: req.user.id
         })
@@ -34,11 +34,13 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/user/:userId', (req, res, next) => {
-    Order.findAll(where: {
-            userId: req.params.userId
+    Order.findAll({
+            where: {
+                userId: req.params.userId
+            }
         })
         .then(orders => {
             res.json(orders)
         })
         .catch(next)
-})
+});
