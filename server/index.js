@@ -1,7 +1,6 @@
 const path = require('path')
 const express = require('express')
 const router = express.Router();
-const { Cart } = require('./db/models');
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const compression = require('compression')
