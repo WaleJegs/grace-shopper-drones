@@ -12,6 +12,7 @@ class orderHistory extends Component {
     }
 
     render () {
+        console.log('props:', this.props);
         return (
             <div>
                 <h1> Order History </h1>

@@ -10,25 +10,61 @@ import {connect} from 'react-redux'
   
    }
 
-   componentDidMount(){
-
-   }
 
 
     render(){
-        console.log(this.props.user)
+        console.log("cart:",this.props.cart)
         let arr=window.localStorage.getItem('cart').split('-')
-        console.log(arr)
+      
+        const cart=this.props.cart
+        const newcart= function newcart(arg){
+          let obj={}
+          for(var i=0;i<arg.length;i++){
+            if(obj[arg[i]]) obj[arg[i]]=obj[arg[i]]+1
+            else obj[arg[i]]=1
+          }
+          return obj
+        }
+        let objcart=newcart(cart)
+
+        function turnToArray(obj){
+          let final=[]
+          for(let i in obj){
+            final.push(i+"/"+obj[i])
+          }
+          return final
+        }
+
+        let finalCart=turnToArray(objcart)
+        console.log("finalcart:",finalCart)
+        
         return(
            <div>
-            <div>{"name "+arr[0]+ "price:"+ arr[1]+arr[2]}</div>
+             <tr>
+              <th> Product name </th>
+              <th> Price </th> 
+              <th> Quantity </th>
+            </tr>
+
+            <div>
+            {
+            finalCart.length>0 &&finalCart.map((item)=>{
+              return (<tr key={item.id}>
+                      <th>{item.split("/")[0].split('-')[3]}</th>
+                      <th>{item.split("/")[0].split('-')[2]}</th> 
+                      <th>{item.split('/')[1]}</th>
+                    </tr>)
+            })  
+            }
+            </div>
+            
             { 
               this.props.user.email ? (<button>Checkout</button>) :
             (<form onSubmit={this.handleSubmit}>
               <label> Email:
                 <input type="text" ref={(input)=>this.input=input} />
               </label>
-                <input type="submit" value="Check Out" />
+              
              </form >)
                
             }
@@ -39,7 +75,7 @@ import {connect} from 'react-redux'
 }
 
 const mapStateToProps = state => {
-    return {user: state.user}
+    return {user: state.user, cart:state.product.cart}
  }
 
 

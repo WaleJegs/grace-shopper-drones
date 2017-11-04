@@ -1,11 +1,22 @@
 import axios from 'axios'
 
 //ACTION TYPES
-const GET_PRODUCT_LIST="GET_PRODUCT_LIST"
+const GET_PRODUCT_LIST = "GET_PRODUCT_LIST"
 const ADD_PRODUCT="ADD_PRODUCT"
 const DELETE_PRODUCT="DELETE_PRODUCT"
 const GET_SINGLE_PRODUCT="GET_SINGLE_PRODUCT"
 const GET_ORDER_HISTORY="GET_ORDER_HISTORY"
+const ADD_TO_CART="ADD_TO_CART"
+
+
+const initialState = {
+    products: [],
+    singleProduct: {},
+    newProduct: {},
+    cart: [],
+    orderHistory: []
+}
+
 //ACTION CREATORS
 export function getProductList(productList){
     const action = {type: GET_PRODUCT_LIST, productList };
@@ -27,8 +38,13 @@ export function deleteProduct(product){
     return action;
 }
 
+export function addToCart(product){
+    const action = { type: ADD_TO_CART, product }
+    return action;
+}
+
 export function getOrderHistory(orders){
-    const action = { type: GET_ORDER_HISTORY, orders }
+    const action = { type: GET_ORDER_HISTORY, orders}
     return action;
 }
 
@@ -41,6 +57,13 @@ export function fetchProductList(){
                 const action = getProductList(products)
                 dispatch(action)
             });
+    }
+}
+
+export function addToCartAction(product){
+    return function (dispatch){
+        const action = addToCart(product)
+        dispatch(action)
     }
 }
 
@@ -96,9 +119,12 @@ const intialState={
     orderHistory: []
 }
 
-export default function reducer( state=intialState, action){
+export default function reducer( state = initialState, action){
 
     switch (action.type){
+
+        case ADD_TO_CART:
+        return Object.assign({}, state, {cart: [...state.cart, action.product]} );
 
         case GET_PRODUCT_LIST:
             return Object.assign({}, state, {products: action.productList});

@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import {connect} from 'react-redux'
-import {getSingleProductThunk} from '../store/product'
+import {getSingleProductThunk,addToCartAction} from '../store/product'
 
 class SingleProduct extends Component{
     constructor(props){
@@ -13,13 +13,20 @@ class SingleProduct extends Component{
       }
 
     handleClick(e){
-
-        window.localStorage.setItem("cart",this.props.singleProduct.id+"-"+this.props.singleProduct.name+"-"+this.props.singleProduct.price)
-        console.log(window.localStorage.getItem("cart"))
+        if (!window.localStorage.getItem("cart")){
+            window.localStorage.setItem("cart", this.props.singleProduct.id+"-"+this.props.singleProduct.price+"-"+this.props.singleProduct.name)
+            this.props.addToCartAction(window.localStorage.getItem('cart').split('-')[0])
+            console.log(window.localStorage.getItem("cart"))
+        } else {
+            let currentCart = window.localStorage.getItem("cart");
+            window.localStorage.setItem("cart", "next"+"-"+this.props.singleProduct.id+"-"+this.props.singleProduct.price+"-"+this.props.singleProduct.name+"/" + currentCart)
+            this.props.addToCartAction(window.localStorage.getItem('cart').split('/')[0])
+        }
     }
     render(){
         
         const product=this.props.singleProduct
+
 
         return(
         <div>
@@ -37,10 +44,10 @@ class SingleProduct extends Component{
 
 
 const mapStateToProps = state => {
-    return { singleProduct: state.product.singleProduct }
+    return { singleProduct: state.product.singleProduct, cart: state.product.cart}
  }
  
- const mapDispatchToProps = ({getSingleProductThunk})
+ const mapDispatchToProps = ({getSingleProductThunk, addToCartAction})
  
  export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
  
