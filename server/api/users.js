@@ -33,17 +33,6 @@ router.post('/', (req, res, next) => {
         .catch(next);
 });
 
-router.post('/cart',(req,res,next)=>{
-    console.log(req.body)
-    User.findOrCreate(req.body)
-    .spread((user, created) => {
-        console.log(user.get({
-          plain: true
-        }))
-        console.log(created)
-    .catch(next)
-})
-
 router.put('/:userId', (req, res, next) => {
     User.findById(req.params.userId)
         .then(user => {
@@ -61,21 +50,3 @@ router.delete('/:userId', (req, res, next) => {
         })
         .catch(next);
 });
-
-// router.post('/:userId/cart/:productId', (req, res, next) => {
-//     let cart = [Product.findById(req.params.productId), User.findById(req.params.userId)]
-//     Cart.create({
-//       where: {
-//         sessionId: this.id
-//       }
-//     })
-//     .then(cart => {
-//       req.session.id = cart.id
-//     })
-//     .then
-//     Promise.all(cart)
-//       .then([product, user] => {
-
-//         })
-//       })
-// })
