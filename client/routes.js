@@ -1,12 +1,15 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Router} from 'react-router'
-import {Route, Switch} from 'react-router-dom'
+import {Route, Switch,Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
 import {Main, Login, Signup, UserHome} from './components'
 import {me} from './store'
-
+import  ProductList  from "./components/productList"
+import pList from "./components/pLIst"
+import SingleProduct from './components/singleProduct'
+import Cart from './components/cart'
 /**
  * COMPONENT
  */
@@ -19,12 +22,22 @@ class Routes extends Component {
     const {isLoggedIn} = this.props
 
     return (
+      <div>
       <Router history={history}>
         <Main>
+        <Link to={'/products'}>
+         <button>Products</button>
+        </Link>
+        <Link to={'/cart'}>
+        <button >Cart</button>
+        </Link>
           <Switch>
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route exact path="/products" component={ProductList} />
+            <Route path="/products/:productId" component={ SingleProduct} />
+            <Route path="/cart" component={Cart} />
             {
               isLoggedIn &&
                 <Switch>
@@ -37,6 +50,7 @@ class Routes extends Component {
           </Switch>
         </Main>
       </Router>
+      </div>
     )
   }
 }
