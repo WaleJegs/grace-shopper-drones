@@ -10,6 +10,8 @@ import  ProductList  from "./components/productList"
 import pList from "./components/pLIst"
 import SingleProduct from './components/singleProduct'
 import Cart from './components/cart'
+import OrderHistory from './components/orderHistory'
+
 /**
  * COMPONENT
  */
@@ -43,6 +45,7 @@ class Routes extends Component {
                 <Switch>
                   {/* Routes placed here are only available after logging in */}
                   <Route path="/home" component={UserHome} />
+                  <Route path="/orderHistory" component={OrderHistory} />
                 </Switch>
             }
             {/* Displays our Login component as a fallback */}
