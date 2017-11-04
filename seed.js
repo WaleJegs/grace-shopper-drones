@@ -26,7 +26,7 @@ db.sync({ force: true })
         }, {
             name: 'GPS Drone',
             price: 1800,
-            picture: 'httpgit://www.dronesglobe.com/wp-content/uploads/2017/04/hubsan_h501s_web-1.jpg',
+            picture: 'http://www.dronesglobe.com/wp-content/uploads/2017/04/hubsan_h501s_web-1.jpg',
             description: 'Equipped with GPS and surveillance system. Can be fitted with a camera if being used for surveillance.',
             quantity: 1000
         }, {
