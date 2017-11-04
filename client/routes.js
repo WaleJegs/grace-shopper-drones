@@ -9,7 +9,6 @@ import {me} from './store'
 import  ProductList  from "./components/productList"
 import pList from "./components/pLIst"
 import SingleProduct from './components/singleProduct'
-import Cart from './components/cart'
 /**
  * COMPONENT
  */
