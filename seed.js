@@ -6,14 +6,14 @@ db.sync({ force: true })
     .then(() => {
         console.log('Seeding database')
         return User.bulkCreate([{
-            email: 'Bob Billups',
-            password: 'thisisawordthatpasses'
+            email: 'Bob.Billups@yahoo.com',
+            password: 'password'
         }, {
-            email: 'Larry Lawrence',
-            password: 'putittogether'
+            email: 'LarryLawrence@gmail.com',
+            password: 'password'
         }, {
-            email: 'Peter Pauslon',
-            password: 'whatmypassword?'
+            email: 'PeterPauslon@aol.com',
+            password: 'password'
         }])
     })
     .then(() => {
