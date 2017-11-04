@@ -3,19 +3,18 @@ import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios'
 import {auth} from '../store/user'
 import {connect} from 'react-redux'
+import { checkoutCart } from '../store/product'
 
  class Cart extends Component{
    constructor(props){
        super(props)
-  
+
    }
-
-
 
     render(){
         console.log("cart:",this.props.cart)
         let arr=window.localStorage.getItem('cart').split('-')
-      
+
         const cart=this.props.cart
         const newcart= function newcart(arg){
           let obj={}
@@ -35,14 +34,14 @@ import {connect} from 'react-redux'
           return final
         }
 
-        let finalCart=turnToArray(objcart)
+        let finalCart =turnToArray(objcart)
         console.log("finalcart:",finalCart)
-        
+
         return(
            <div>
              <tr>
               <th> Product name </th>
-              <th> Price </th> 
+              <th> Price </th>
               <th> Quantity </th>
             </tr>
 
@@ -51,32 +50,39 @@ import {connect} from 'react-redux'
             finalCart.length>0 &&finalCart.map((item)=>{
               return (<tr key={item.id}>
                       <th>{item.split("/")[0].split('-')[3]}</th>
-                      <th>{item.split("/")[0].split('-')[2]}</th> 
+                      <th>{item.split("/")[0].split('-')[2]}</th>
                       <th>{item.split('/')[1]}</th>
                     </tr>)
-            })  
+            })
             }
             </div>
-            
-            { 
-              this.props.user.email ? (<button>Checkout</button>) :
+
+            {
+              this.props.user.email ? (<button onClick ={ (e) => {
+                window.localStorage.setItem("cart", "");
+                this.props.checkoutCart(finalCart, this.props.user.id)
+              }} >Checkout</button>) :
             (<form onSubmit={this.handleSubmit}>
               <label> Email:
                 <input type="text" ref={(input)=>this.input=input} />
               </label>
-              
+
              </form >)
-               
+
             }
-            
+
            </div>
         )
+
     }
+
 }
 
 const mapStateToProps = state => {
-    return {user: state.user, cart:state.product.cart}
+    return {user: state.user, cart: state.product.cart}
  }
 
+ const mapDispatchToProps = ({ checkoutCart })
 
-export default connect(mapStateToProps)(Cart)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)
