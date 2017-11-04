@@ -5,6 +5,7 @@ const GET_PRODUCT_LIST="GET_PRODUCT_LIST"
 const ADD_PRODUCT="ADD_PRODUCT"
 const DELETE_PRODUCT="DELETE_PRODUCT"
 const GET_SINGLE_PRODUCT="GET_SINGLE_PRODUCT"
+const GET_ORDER_HISTORY="GET_ORDER_HISTORY"
 //ACTION CREATORS
 export function getProductList(productList){
     const action = {type: GET_PRODUCT_LIST, productList };
@@ -23,6 +24,11 @@ export function addProduct(newProduct){
 
 export function deleteProduct(product){
     const action = { type: DELETE_PRODUCT, product }
+    return action;
+}
+
+export function getOrderHistory(orders){
+    const action = { type: GET_ORDER_HISTORY, orders }
     return action;
 }
 
@@ -71,11 +77,23 @@ export function deleteProductThunk(productId){
     }
 }
 
+export function fetchOrderHistory (userId){
+    return function thunk(dispatch){
+        return axios.get(`/api/users/${userId}/orderHistory`)
+            .then(res => res.data)
+            .then(orders => {
+                const action = getOrderHistory(orders)
+                dispatch(action);
+            })
+    }
+}
+
 //REDUCER
 const intialState={
     products:[],
     singleProduct:{},
-    newProduct:{}
+    newProduct:{},
+    orderHistory: []
 }
 
 export default function reducer( state=intialState, action){
@@ -89,7 +107,10 @@ export default function reducer( state=intialState, action){
             return Object.assign({}, state, {newProduct: action.newProduct})
 
         case GET_SINGLE_PRODUCT:
-            return  Object.assign({}, state, {singleProduct: action.product})
+            return Object.assign({}, state, {singleProduct: action.product})
+        
+        case GET_ORDER_HISTORY:
+            return Object.assign({}, state, {orderHistory: action.orders})
 
         default:
             return state
