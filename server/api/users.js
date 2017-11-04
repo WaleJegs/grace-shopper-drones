@@ -33,17 +33,6 @@ router.post('/', (req, res, next) => {
         .catch(next);
 });
 
-router.post('/cart',(req,res,next)=>{
-    console.log(req.body)
-    User.findOrCreate(req.body)
-    .spread((user, created) => {
-        console.log(user.get({
-          plain: true
-        }))
-        console.log(created)
-    .catch(next)
-})
-
 router.put('/:userId', (req, res, next) => {
     User.findById(req.params.userId)
         .then(user => {
