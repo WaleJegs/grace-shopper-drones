@@ -1,4 +1,4 @@
-const db = require('./db');
+const db = require('./server/db');
 const { Product } = require('./server/db/models')
 const { User } = require('./server/db/models')
 
@@ -33,7 +33,8 @@ db.sync({ force: true })
             name: 'Delivery Drone',
             price: 2500,
             picture: 'https://cdn.technologyreview.com/i/images/deliverydrone.jpg?sw=1400',
-            description: 'Heavy duty helicopter drone. Carries packages up to 15 kg.'
+            description: 'Heavy duty helicopter drone. Carries packages up to 15 kg.',
+            quantity: 1000
         }, {
             name: 'Endurance Drone',
             price: 5000,
@@ -44,12 +45,14 @@ db.sync({ force: true })
             name: 'Racing Drone',
             price: 900,
             picture: 'https://hobbyking.com/media/catalog/product/cache/1/image/565x414/9df78eab33525d08d6e5fb8d27136e95/legacy/catalog/82905_6__5.jpg',
-            description: 'The RTF (Ready to Fly) Lumenier Carbon Fiber QAV-R FPV Racing Quadcopter (5"). Fully built and professionally tuned. Includes FrSky X4R receiver.'
+            description: 'The RTF (Ready to Fly) Lumenier Carbon Fiber QAV-R FPV Racing Quadcopter (5"). Fully built and professionally tuned. Includes FrSky X4R receiver.',
+            quantity: 1000
         }, {
             name: 'Photography Drone',
             price: 550,
             picture: 'https://op-cdn-madavor.netdna-ssl.com/2017/08/Karma_0_HERO5_Black_master-600x287.jpg',
-            description: '35.5 ounce drone measuring 14.4 inches long by 8.5 inches wide by 3.5 inches tall. Easy to transport with up to 20 minutes runtime'
+            description: '35.5 ounce drone measuring 14.4 inches long by 8.5 inches wide by 3.5 inches tall. Easy to transport with up to 20 minutes runtime',
+            quantity: 1000
         }])
     })
     .then(() => {
