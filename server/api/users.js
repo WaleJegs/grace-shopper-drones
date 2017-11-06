@@ -25,7 +25,7 @@ router.get('/:userId', (req, res, next) => {
         .catch(next);
 });
 
-//get all the user's orders
+//get all orders if user is admin, otherwise get just orders for the logged in user
 router.get('/:userId/orderHistory', (req, res, next) => {
     User.findById(req.params.userId)
         .then(foundUser => {
