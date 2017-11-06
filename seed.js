@@ -1,6 +1,10 @@
 const db = require('./server/db');
+const crypto = require('crypto')
 const { Product } = require('./server/db/models')
 const { User } = require('./server/db/models')
+const { Order } = require('./server/db/models')
+const { OrderProduct } = require('./server/db/models')
+const { Review } = require('./server/db/models')
 
 db.sync({ force: true })
     .then(() => {
@@ -10,10 +14,14 @@ db.sync({ force: true })
             password: 'password'
         }, {
             email: 'LarryLawrence@gmail.com',
-            password: 'password'
+            password: 'asdf'
         }, {
             email: 'PeterPauslon@aol.com',
-            password: 'password'
+            password: 'qwer'
+        }, {
+            email: 'Admin@Admin.com',
+            password: 'Admin',
+            isAdmin: true
         }])
     })
     .then(() => {
@@ -53,6 +61,62 @@ db.sync({ force: true })
             picture: 'https://op-cdn-madavor.netdna-ssl.com/2017/08/Karma_0_HERO5_Black_master-600x287.jpg',
             description: '35.5 ounce drone measuring 14.4 inches long by 8.5 inches wide by 3.5 inches tall. Easy to transport with up to 20 minutes runtime',
             quantity: 1000
+        }])
+    })
+    .then(() => {
+        return Order.bulkCreate([{
+            userId: 1,
+            status: 'complete'
+        }, {
+            userId: 2,
+            status: 'complete'
+        }, {
+            userId: 3,
+            status: 'complete'
+        }, {
+            userId: 1,
+            status: 'complete'
+        }])
+    })
+    .then(() => {
+        return OrderProduct.bulkCreate([{
+            price: 15,
+            quantity: 2,
+            productId: 1,
+            orderId: 1 
+        }, {
+            price: 30,
+            quantity: 4,
+            productId: 3,
+            orderId: 1
+        }, {
+            price: 20,
+            quantity: 1,
+            productId: 3,
+            orderId: 2
+        }, {
+            price: 50,
+            quantity: 5,
+            productId: 4,
+            orderId: 2
+        }])
+    })
+    .then(() => {
+        return Review.bulkCreate([{
+            text: 'Great drone! Getting a bunch for Christmas!',
+            stars: 5,
+            userId: 1,
+            productId: 2
+        }, {
+            text: 'Mediocre, not super impressed by it\'s navigating abilities',
+            stars: 3,
+            userId: 2,
+            productId: 2
+        }, {
+            text: 'The worst ever!!!!!! Never get this thing!',
+            stars: 1,
+            userId: 3,
+            productId: 2
         }])
     })
     .then(() => {
