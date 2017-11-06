@@ -63,9 +63,7 @@ import { checkoutCart } from '../store/product'
                 this.props.checkoutCart(finalCart, this.props.user.id)
               }} >Checkout</button>) :
             (<form onSubmit={this.handleSubmit}>
-              <label> Email:
-                <input type="text" ref={(input)=>this.input=input} />
-              </label>
+              <h1>Please login inorder to checkout </h1>
 
              </form >)
 
