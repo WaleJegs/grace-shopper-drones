@@ -2644,6 +2644,7 @@ module.exports = defaults;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.placeNewOrder = placeNewOrder;
 exports.checkout = checkout;
 exports.getProductList = getProductList;
 exports.getSingleProduct = getSingleProduct;
@@ -2651,6 +2652,7 @@ exports.addProduct = addProduct;
 exports.deleteProduct = deleteProduct;
 exports.addToCart = addToCart;
 exports.getOrderHistory = getOrderHistory;
+exports.placeOrder = placeOrder;
 exports.checkoutCart = checkoutCart;
 exports.fetchProductList = fetchProductList;
 exports.addToCartAction = addToCartAction;
@@ -2675,17 +2677,23 @@ var DELETE_PRODUCT = "DELETE_PRODUCT";
 var GET_SINGLE_PRODUCT = "GET_SINGLE_PRODUCT";
 var GET_ORDER_HISTORY = "GET_ORDER_HISTORY";
 var ADD_TO_CART = "ADD_TO_CART";
-var CHECKOUT = 'CHECKOUT';
+var CHECKOUT = "CHECKOUT";
+var PLACE_NEW_ORDER = "PLACE_NEW_ORDER";
 
 var initialState = {
     products: [],
     singleProduct: {},
     newProduct: {},
     cart: [],
-    orderHistory: []
+    orderHistory: [],
+    newOrder: {}
 
     //ACTION CREATORS
-};function checkout(cart) {
+};function placeNewOrder(order) {
+    var action = { type: PLACE_NEW_ORDER, order: order };
+    return action;
+}
+function checkout(cart) {
     var action = { type: CHECKOUT, cart: cart };
     return action;
 }
@@ -2720,12 +2728,20 @@ function getOrderHistory(orders) {
 }
 
 //THUNK CREATORS
-function checkoutCart(cart, userId) {
-    var result = {};
-    cart.map(function (product) {
-        return result[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1];
-    });
 
+function placeOrder(order) {
+    return function (dispatch) {
+        var action = placeNewOrder(order);
+        dispatch(action);
+    };
+}
+
+function checkoutCart(cart, userId, address) {
+    var result = { "userInfo": { 'address': address },
+        "products": {} };
+    cart.map(function (product) {
+        return result.products[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1];
+    });
     return function thunk(dispatch) {
         return _axios2.default.post("/api/users/" + userId + "/cart", result).then(function (res) {
             return res.data;
@@ -2806,6 +2822,10 @@ function reducer() {
 
 
     switch (action.type) {
+
+        case PLACE_NEW_ORDER:
+            return Object.assign({}, state, { newOrder: action.order });
+
         case CHECKOUT:
             return Object.assign({}, state, { cart: action.cart });
 
@@ -8960,6 +8980,10 @@ var _orderHistory = __webpack_require__(209);
 
 var _orderHistory2 = _interopRequireDefault(_orderHistory);
 
+var _afterCheckout = __webpack_require__(210);
+
+var _afterCheckout2 = _interopRequireDefault(_afterCheckout);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9015,6 +9039,7 @@ var Routes = function (_Component) {
                 null,
                 _react2.default.createElement(_reactRouterDom.Route, { path: '/home', component: _components.UserHome }),
                 _react2.default.createElement(_reactRouterDom.Route, { path: '/orderHistory', component: _orderHistory2.default }),
+                _react2.default.createElement(_reactRouterDom.Route, { path: '/afterCheckout', component: _afterCheckout2.default }),
                 isAdmin && _react2.default.createElement(
                   _reactRouterDom.Switch,
                   null,
@@ -10282,9 +10307,30 @@ var Cart = function (_Component) {
         }
         return final;
       }
+      function totalQuantity(arr) {
+        var quantity = 0;
+        arr.map(function (product) {
+          quantity += parseInt(product.split('/')[1]);
+        });
+        return quantity;
+      }
+
+      function totalPrice(arr) {
+        var total = 0;
+        arr.map(function (product) {
+          total += parseInt(product.split("-")[2]) * parseInt(product.split('/')[1]);
+        });
+        return total;
+      }
 
       var finalCart = turnToArray(objcart);
-      console.log("finalcart:", finalCart);
+      var quantity = totalQuantity(finalCart);
+      var finalPrice = totalPrice(finalCart);
+
+      var street = void 0;
+      var city = void 0;
+      var state = void 0;
+      var zipcode = void 0;
 
       return _react2.default.createElement(
         'div',
@@ -10333,16 +10379,115 @@ var Cart = function (_Component) {
             );
           })
         ),
+        _react2.default.createElement(
+          'div',
+          null,
+          'Quantity:',
+          quantity
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          'Total:',
+          finalPrice
+        ),
         this.props.user.email ? _react2.default.createElement(
-          'button',
-          { onClick: function onClick(e) {
-              window.localStorage.setItem("cart", "");
-              _this2.props.checkoutCart(finalCart, _this2.props.user.id);
-            } },
-          'Checkout'
+          'div',
+          null,
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'h2',
+              null,
+              'Shipping Address'
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'Street address: '
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement('input', { onChange: function onChange(e) {
+                  street = e.target.value;
+                } })
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'City : '
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement('input', { onChange: function onChange(e) {
+                  city = e.target.value;
+                } })
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'State : '
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              ' ',
+              _react2.default.createElement('input', { onChange: function onChange(e) {
+                  state = e.target.value;
+                } })
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'Zip code : '
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              ' ',
+              _react2.default.createElement('input', { onChange: function onChange(e) {
+                  zipcode = e.target.value;
+                  console.log(street, city, state, zipcode);
+                } })
+            )
+          ),
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/afterCheckout' },
+            _react2.default.createElement(
+              'button',
+              { onClick: function onClick(e) {
+                  window.localStorage.setItem("cart", "");
+                  var address = street + "/" + city + "/" + state + "/" + zipcode;
+                  var newOrder = { "address": address, "cart": finalCart };
+                  _this2.props.placeOrder(newOrder);
+                  _this2.props.checkoutCart(finalCart, _this2.props.user.id, address);
+                } },
+              'Checkout'
+            )
+          )
         ) : _react2.default.createElement(
           'form',
-          { onSubmit: this.handleSubmit },
+          null,
           _react2.default.createElement(
             'h1',
             null,
@@ -10360,7 +10505,7 @@ var mapStateToProps = function mapStateToProps(state) {
   return { user: state.user, cart: state.product.cart };
 };
 
-var mapDispatchToProps = { checkoutCart: _product.checkoutCart };
+var mapDispatchToProps = { checkoutCart: _product.checkoutCart, placeOrder: _product.placeOrder };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
 
@@ -38590,6 +38735,84 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = { fetchOrderHistory: _product.fetchOrderHistory };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(orderHistory);
+
+/***/ }),
+/* 210 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(15);
+
+var _reactRedux = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AfterCheckout = function (_Component) {
+    _inherits(AfterCheckout, _Component);
+
+    function AfterCheckout(props) {
+        _classCallCheck(this, AfterCheckout);
+
+        return _possibleConstructorReturn(this, (AfterCheckout.__proto__ || Object.getPrototypeOf(AfterCheckout)).call(this, props));
+    }
+
+    _createClass(AfterCheckout, [{
+        key: 'render',
+        value: function render() {
+            console.log(this.props.newOrder);
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    'Your Order Has Been Sucessully Placed!!!'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'order id: '
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'shipping address:'
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'purchased product:'
+                )
+            );
+        }
+    }]);
+
+    return AfterCheckout;
+}(_react.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return { newOrder: state.propduct.newOrder };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(AfterCheckout);
 
 /***/ })
 /******/ ]);

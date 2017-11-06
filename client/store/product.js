@@ -3,12 +3,12 @@ import axios from 'axios'
 //ACTION TYPES
 const GET_PRODUCT_LIST = "GET_PRODUCT_LIST"
 const ADD_PRODUCT = "ADD_PRODUCT"
-const DELETE_PRODUCT="DELETE_PRODUCT"
-const GET_SINGLE_PRODUCT="GET_SINGLE_PRODUCT"
-const GET_ORDER_HISTORY="GET_ORDER_HISTORY"
-const ADD_TO_CART="ADD_TO_CART"
-const CHECKOUT = 'CHECKOUT'
-
+const DELETE_PRODUCT = "DELETE_PRODUCT"
+const GET_SINGLE_PRODUCT = "GET_SINGLE_PRODUCT"
+const GET_ORDER_HISTORY = "GET_ORDER_HISTORY"
+const ADD_TO_CART = "ADD_TO_CART"
+const CHECKOUT = "CHECKOUT"
+const PLACE_NEW_ORDER = "PLACE_NEW_ORDER"
 
 
 const initialState = {
@@ -16,10 +16,15 @@ const initialState = {
     singleProduct: {},
     newProduct: {},
     cart: [],
-    orderHistory: []
+    orderHistory: [],
+    newOrder: {}
 }
 
 //ACTION CREATORS
+export function placeNewOrder(order){
+    const action = { type: PLACE_NEW_ORDER, order }
+    return action
+}
 export function checkout(cart) {
     const action = { type: CHECKOUT, cart }
     return action;
@@ -55,14 +60,22 @@ export function getOrderHistory(orders){
 }
 
 //THUNK CREATORS
-export function checkoutCart(cart, userId) {
-    var result = {}
-    cart.map(product => result[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
 
+export function placeOrder(order){
+    return function(dispatch){
+        const action = placeNewOrder(order)
+        dispatch(action)
+    }
+}
+
+export function checkoutCart(cart, userId,address) {
+    var result = {"userInfo" : { 'address': address},
+                "products" : {}}
+    cart.map(product => result.products[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
     return function thunk(dispatch) {
         return axios.post(`/api/users/${userId}/cart`, result)
             .then(res => res.data)
-            .then(() => {
+            .then(() => {           
                 const action = checkout([]);
                 dispatch(action)
             });
@@ -137,6 +150,10 @@ export function fetchOrderHistory (userId){
 export default function reducer(state = initialState, action) {
 
     switch (action.type) {
+
+        case PLACE_NEW_ORDER:
+            return Object.assign({}, state, { newOrder: action.order })
+
         case CHECKOUT:
             return Object.assign({}, state, { cart: action.cart })
 

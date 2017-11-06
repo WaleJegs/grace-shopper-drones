@@ -66,18 +66,19 @@ router.delete('/:userId', (req, res, next) => {
 router.post('/:userId/cart', (req, res, next) => {
     Order.create({
             userId: req.params.userId,
-            status: 'paid'
+            status: 'paid',
+            address: req.body.userInfo.address
         })
         .then(order => {
             return Product.findAll({
                     where: {
                         id: {
-                            $in: Object.keys(req.body).map(key => parseInt(key))
+                            $in: Object.keys(req.body.products).map(key => parseInt(key))
                         }
                     }
                 })
                 .then(products => {
-                    return products.map(pro => order.addProduct(pro, { through: { quantity: req.body[pro.id], price: pro.price, userId: req.params.userId } }))
+                    return products.map(pro => order.addProduct(pro, { through: { quantity: req.body.products[pro.id], price: pro.price, userId: req.params.userId } }))
                 })
                 .then(ops => {
                     return Promise.all(ops)
