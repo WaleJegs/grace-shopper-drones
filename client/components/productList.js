@@ -7,15 +7,11 @@ import {fetchProductList} from '../store/product'
 class productList extends Component{
     constructor(props){
         super(props)
-
-
     }
     
     componentDidMount(){
       this.props.fetchProductList()   
     }
-
-   
 
     render(){
         return (
