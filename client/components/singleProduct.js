@@ -15,7 +15,7 @@ class SingleProduct extends Component{
     handleClick(e){
         if (!window.localStorage.getItem("cart")){
             window.localStorage.setItem("cart", "next-"+this.props.singleProduct.id+"-"+this.props.singleProduct.price+"-"+this.props.singleProduct.name)
-            this.props.addToCartAction(window.localStorage.getItem('cart').split('-')[0])
+            this.props.addToCartAction(window.localStorage.getItem('cart'))
             console.log(window.localStorage.getItem("cart"))
         } else {
             let currentCart = window.localStorage.getItem("cart");
