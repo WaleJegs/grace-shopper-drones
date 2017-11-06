@@ -12,7 +12,6 @@ import {logout} from '../store'
  */
 const Main = (props) => {
   const {children, handleClick, isLoggedIn, isAdmin} = props
-console.log("isadmin:",isAdmin)
   return (
     <div>
       <h1>Drone Shop</h1>

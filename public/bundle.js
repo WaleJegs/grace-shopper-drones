@@ -10449,7 +10449,6 @@ var Main = function Main(props) {
       isLoggedIn = props.isLoggedIn,
       isAdmin = props.isAdmin;
 
-  console.log("isadmin:", isAdmin);
   return _react2.default.createElement(
     'div',
     null,
@@ -10625,12 +10624,12 @@ var orderHistory = function (_Component) {
     _createClass(orderHistory, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.props.fetchOrderHistory(4);
+            this.props.fetchOrderHistory(this.props.user.id);
         }
     }, {
         key: 'render',
         value: function render() {
-            console.log('props:', this.props);
+            console.log('props: ', this.props);
             return _react2.default.createElement(
                 'div',
                 null,
@@ -10671,7 +10670,10 @@ var orderHistory = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-    return { orderHistory: state.product.orderHistory };
+    return {
+        orderHistory: state.product.orderHistory,
+        user: state.user
+    };
 };
 
 var mapDispatchToProps = { fetchOrderHistory: _product.fetchOrderHistory };
