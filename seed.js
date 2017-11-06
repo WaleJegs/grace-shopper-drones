@@ -4,6 +4,7 @@ const { Product } = require('./server/db/models')
 const { User } = require('./server/db/models')
 const { Order } = require('./server/db/models')
 const { OrderProduct } = require('./server/db/models')
+const { Review } = require('./server/db/models')
 
 db.sync({ force: true })
     .then(() => {
@@ -17,6 +18,10 @@ db.sync({ force: true })
         }, {
             email: 'PeterPauslon@aol.com',
             password: 'qwer'
+        }, {
+            email: 'Admin@Admin.com',
+            password: 'Admin',
+            isAdmin: true
         }])
     })
     .then(() => {
@@ -94,6 +99,24 @@ db.sync({ force: true })
             quantity: 5,
             productId: 4,
             orderId: 2
+        }])
+    })
+    .then(() => {
+        return Review.bulkCreate([{
+            text: 'Great drone! Getting a bunch for Christmas!',
+            stars: 5,
+            userId: 1,
+            productId: 2
+        }, {
+            text: 'Mediocre, not super impressed by it\'s navigating abilities',
+            stars: 3,
+            userId: 2,
+            productId: 2
+        }, {
+            text: 'The worst ever!!!!!! Never get this thing!',
+            stars: 1,
+            userId: 3,
+            productId: 2
         }])
     })
     .then(() => {
