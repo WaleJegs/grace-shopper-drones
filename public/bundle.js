@@ -10870,6 +10870,10 @@ var _reactRedux = __webpack_require__(7);
 
 var _product = __webpack_require__(13);
 
+var _reviewList = __webpack_require__(210);
+
+var _reviewList2 = _interopRequireDefault(_reviewList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10911,18 +10915,85 @@ var SingleProduct = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-
             var product = this.props.singleProduct;
+            var imageStyle = {
+                backgroundImage: 'url(' + product.picture + ')',
+                backgroundSize: 'cover'
+            };
 
             return _react2.default.createElement(
                 'div',
-                null,
-                "name: " + product.name + " price: " + product.price + " description :" + product.description,
-                _react2.default.createElement('img', { src: product.picture }),
+                { className: 'singleProduct' },
                 _react2.default.createElement(
-                    'button',
-                    { onClick: this.handleClick },
-                    'Add To Cart '
+                    'div',
+                    { className: 'productImageHolder' },
+                    _react2.default.createElement('img', { src: product.picture })
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'productDetails' },
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'label' },
+                            ' Name: '
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            ' ',
+                            product.name,
+                            ' '
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'label' },
+                            ' Price: '
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            ' ',
+                            product.price,
+                            ' '
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'label' },
+                            ' Description: '
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            null,
+                            ' ',
+                            product.description,
+                            ' '
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'addToCartHolder' },
+                    _react2.default.createElement(
+                        'button',
+                        { onClick: this.handleClick },
+                        'Add To Cart '
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'reviewList' },
+                    _react2.default.createElement(_reviewList2.default, null)
                 )
             );
         }
@@ -11316,7 +11387,7 @@ exports = module.exports = __webpack_require__(128)();
 
 
 // module
-exports.push([module.i, "body {\n  font-family: sans-serif; }\n  body a {\n    text-decoration: none; }\n  body label {\n    display: block; }\n  body nav a {\n    display: inline-block;\n    margin: 1em; }\n  body form div {\n    margin: 1em;\n    display: inline-block; }\n", ""]);
+exports.push([module.i, "body {\n  font-family: sans-serif; }\n  body a {\n    text-decoration: none; }\n  body label {\n    display: block; }\n  body nav a {\n    display: inline-block;\n    margin: 1em; }\n  body form div {\n    margin: 1em;\n    display: inline-block; }\n\n/********************SINGLE PRODUCT STYLES ****************/\n.singleProduct {\n  display: flex;\n  flex-direction: row; }\n\n.productImageHolder img {\n  width: 100%;\n  height: auto; }\n\n.productDetails {\n  width: 20%; }\n\n.addToCartHolder {\n  width: 10%; }\n", ""]);
 
 // exports
 
@@ -38592,6 +38663,121 @@ function toArray(list, index) {
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 210 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(16);
+
+var _reactRedux = __webpack_require__(7);
+
+var _review = __webpack_require__(211);
+
+var _review2 = _interopRequireDefault(_review);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ReviewList = function (_Component) {
+    _inherits(ReviewList, _Component);
+
+    function ReviewList(props) {
+        _classCallCheck(this, ReviewList);
+
+        return _possibleConstructorReturn(this, (ReviewList.__proto__ || Object.getPrototypeOf(ReviewList)).call(this, props));
+    }
+
+    _createClass(ReviewList, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    ' Product Reviews '
+                ),
+                this.props.listOfReviews ? this.props.listOfReviews.map(function (review) {
+                    return _react2.default.createElement(_review2.default, { key: review.id, review: review });
+                }) : _react2.default.createElement(
+                    'div',
+                    null,
+                    ' No Reviews Yet '
+                )
+            );
+        }
+    }]);
+
+    return ReviewList;
+}(_react.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+    return { listOfReviews: state.product.singleProduct.reviews };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(ReviewList);
+
+/***/ }),
+/* 211 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(16);
+
+var _reactRedux = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Review(props) {
+    return _react2.default.createElement(
+        'div',
+        { className: 'review' },
+        _react2.default.createElement(
+            'div',
+            { className: 'review-stars' },
+            'Rating: ',
+            props.review.stars
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'review-text' },
+            'Comments: ',
+            props.review.text
+        )
+    );
+}
+
+exports.default = Review;
 
 /***/ })
 /******/ ]);

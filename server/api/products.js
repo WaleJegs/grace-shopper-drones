@@ -9,9 +9,8 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/:productId', (req, res, next) => {
-    Product.findById(req.params.productId)
+    Product.findById(req.params.productId, {include:[{all:true}]})
         .then((product) => {
-            console.log('session', req.session)
             res.json(product)
         })
         .catch(next);

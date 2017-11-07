@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import {connect} from 'react-redux'
 import {getSingleProductThunk,addToCartAction} from '../store/product'
+import ReviewList from './reviewList';
 
 class SingleProduct extends Component{
     constructor(props){
@@ -24,19 +25,38 @@ class SingleProduct extends Component{
         }
     }
     render(){
-
         const product = this.props.singleProduct
-
+        const imageStyle = {
+            backgroundImage: 'url(' + product.picture + ')',
+            backgroundSize: 'cover'
+        }
 
         return (
-        <div>
-            {
-              "name: " + product.name + " price: "+product.price + " description :"+ product.description
-            }
-              <img src={product.picture} />
-              <button onClick={this.handleClick}>Add To Cart </button>
-
-        </div>
+            <div className='singleProduct'>
+                <div className='productImageHolder'>
+                    <img src={product.picture} />
+                </div>
+                <div className='productDetails'>
+                    <div>
+                        <span className='label'> Name: </span> 
+                        <span > {product.name} </span>
+                    </div>
+                    <div>
+                        <span className='label'> Price: </span> 
+                        <span> {product.price} </span>
+                    </div>
+                    <div>
+                        <span className='label'> Description: </span> 
+                        <span> {product.description} </span> 
+                    </div>
+                </div>
+                <div className='addToCartHolder'> 
+                    <button onClick={this.handleClick}>Add To Cart </button>
+                </div>
+                <div className='reviewList'>
+                    <ReviewList />
+                </div>
+            </div>
         )
     }
 }
