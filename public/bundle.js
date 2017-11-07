@@ -10287,7 +10287,7 @@ var Cart = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      console.log("cart:", this.props.cart);
+      console.log('cart:', this.props.cart);
       var arr = window.localStorage.getItem('cart').split('-');
 
       var cart = this.props.cart;
@@ -10303,7 +10303,7 @@ var Cart = function (_Component) {
       function turnToArray(obj) {
         var final = [];
         for (var i in obj) {
-          final.push(i + "/" + obj[i]);
+          final.push(i + '/' + obj[i]);
         }
         return final;
       }
@@ -10318,7 +10318,7 @@ var Cart = function (_Component) {
       function totalPrice(arr) {
         var total = 0;
         arr.map(function (product) {
-          total += parseInt(product.split("-")[2]) * parseInt(product.split('/')[1]);
+          total += parseInt(product.split('-')[2]) * parseInt(product.split('/')[1]);
         });
         return total;
       }
@@ -10364,12 +10364,12 @@ var Cart = function (_Component) {
               _react2.default.createElement(
                 'th',
                 null,
-                item.split("/")[0].split('-')[3]
+                item.split('/')[0].split('-')[3]
               ),
               _react2.default.createElement(
                 'th',
                 null,
-                item.split("/")[0].split('-')[2]
+                item.split('/')[0].split('-')[2]
               ),
               _react2.default.createElement(
                 'th',
@@ -10476,9 +10476,9 @@ var Cart = function (_Component) {
             _react2.default.createElement(
               'button',
               { onClick: function onClick(e) {
-                  window.localStorage.setItem("cart", "");
-                  var address = street + "/" + city + "/" + state + "/" + zipcode;
-                  var newOrder = { "address": address, "cart": finalCart };
+                  window.localStorage.setItem('cart', '');
+                  var address = street + '/' + city + '/' + state + '/' + zipcode;
+                  var newOrder = { 'address': address, 'cart': finalCart, 'quantity': quantity, 'total': finalPrice };
                   _this2.props.placeOrder(newOrder);
                   _this2.props.checkoutCart(finalCart, _this2.props.user.id, address);
                 } },
@@ -38777,29 +38777,108 @@ var AfterCheckout = function (_Component) {
     _createClass(AfterCheckout, [{
         key: 'render',
         value: function render() {
-            console.log(this.props.newOrder);
+            var address = "";
+            var products = [""];
+            var quantity = "";
+            var total = "";
+            console.log("new order", this.props.newOrder);
+            if (this.props.newOrder.address) {
+                address = this.props.newOrder.address.split("/");
+                products = this.props.newOrder.cart;
+                quantity = this.props.newOrder.quantity;
+                total = this.props.newOrder.total;
+            }
+
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     'h1',
                     null,
-                    'Your Order Has Been Sucessully Placed!!!'
+                    'Your Order Has Been Placed!!!'
                 ),
                 _react2.default.createElement(
                     'div',
                     null,
-                    'order id: '
+                    'shipping address:',
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        address[0]
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        address[1],
+                        '   '
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        address[2]
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        address[3]
+                    )
                 ),
                 _react2.default.createElement(
                     'div',
                     null,
-                    'shipping address:'
+                    'Order Summary:',
+                    _react2.default.createElement(
+                        'tr',
+                        null,
+                        _react2.default.createElement(
+                            'th',
+                            null,
+                            ' Product name '
+                        ),
+                        _react2.default.createElement(
+                            'th',
+                            null,
+                            ' Price '
+                        ),
+                        _react2.default.createElement(
+                            'th',
+                            null,
+                            ' Quantity '
+                        )
+                    ),
+                    products.map(function (product) {
+                        return _react2.default.createElement(
+                            'tr',
+                            { key: product.id },
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                product.split('/')[0].split('-')[3]
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                product.split('/')[0].split('-')[2]
+                            ),
+                            _react2.default.createElement(
+                                'th',
+                                null,
+                                product.split('/')[1]
+                            )
+                        );
+                    })
                 ),
                 _react2.default.createElement(
                     'div',
                     null,
-                    'purchased product:'
+                    'Total :',
+                    total
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'Quantity: ',
+                    quantity
                 )
             );
         }
@@ -38809,7 +38888,7 @@ var AfterCheckout = function (_Component) {
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-    return { newOrder: state.propduct.newOrder };
+    return { newOrder: state.product.newOrder };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(AfterCheckout);
