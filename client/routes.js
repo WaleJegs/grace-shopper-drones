@@ -12,7 +12,7 @@ import SingleProduct from './components/singleProduct'
 import EditProduct from './components/editProduct'
 import Cart from './components/cart'
 import OrderHistory from './components/orderHistory'
-
+import AfterCheckout from './components/afterCheckout'
 /**
  * COMPONENT
  */
@@ -35,12 +35,14 @@ class Routes extends Component {
             <Route exact path="/products" component={ProductList} />
             <Route exact path="/products/:productId" component={ SingleProduct} />
             <Route path="/cart" component={Cart} />
+           
             {
               isLoggedIn &&
                 <Switch>
                   {/* Routes placed here are only available after logging in */}
                   <Route path="/home" component={UserHome} />
                   <Route path="/orderHistory" component={OrderHistory} />
+                  <Route path="/afterCheckout" component={AfterCheckout} />
                   { isAdmin &&
                       <Switch>
                         <Route path ="/userManagement" component = {ProductList} />
