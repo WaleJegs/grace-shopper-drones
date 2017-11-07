@@ -11,8 +11,7 @@ import {logout} from '../store'
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const {children, handleClick, isLoggedIn} = props
-
+  const {children, handleClick, isLoggedIn, isAdmin} = props
   return (
     <div>
       <h1>Drone Shop</h1>
@@ -21,13 +20,30 @@ const Main = (props) => {
           isLoggedIn
             ? <div>
               {/* The navbar will show these links after you log in */}
+              { isAdmin
+              ?
+              <div>
               <Link to="/home">Home</Link>
               <a href="#" onClick={handleClick}>Logout</a>
+              <Link to ="/products">Products</Link>
+              <Link to="/cart">Cart</Link>
+              <Link to="/userManagement"> Manage Users </Link>
+               <Link to="/productManagement"> Manage Products </Link>
+              </div>
+              :
+              <div>
+              <Link to="/home">Home</Link>
+              <a href="#" onClick={handleClick}>Logout</a>
+              <Link to ="/products">Products</Link>
+              <Link to="/cart">Cart</Link>
+              </div> }
             </div>
             : <div>
               {/* The navbar will show these links before you log in */}
               <Link to="/login">Login</Link>
               <Link to="/signup">Sign Up</Link>
+              <Link to ="/products">Products</Link>
+              <Link to="/cart">Cart</Link>
             </div>
         }
       </nav>
@@ -42,7 +58,8 @@ const Main = (props) => {
  */
 const mapState = (state) => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    isAdmin: state.user.isAdmin
   }
 }
 
@@ -64,5 +81,6 @@ export default withRouter(connect(mapState, mapDispatch)(Main))
 Main.propTypes = {
   children: PropTypes.array,
   handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
+  isLoggedIn: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired
 }

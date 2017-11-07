@@ -16,6 +16,10 @@ const User = db.define('user', {
   },
   googleId: {
     type: Sequelize.STRING
+  },
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 
@@ -55,3 +59,8 @@ const setSaltAndPassword = user => {
 
 User.beforeCreate(setSaltAndPassword)
 User.beforeUpdate(setSaltAndPassword)
+User.beforeBulkCreate(users => {
+  return users.forEach(function (user) {
+    return setSaltAndPassword(user);
+  })
+})
