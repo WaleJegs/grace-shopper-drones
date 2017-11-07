@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios'
 import {auth} from '../store/user'
 import {connect} from 'react-redux'
-import { checkoutCart, placeOrder } from '../store/product'
+import { checkoutCart, placeOrder,increaseByOne ,decreaseByOne} from '../store/product'
 
  class Cart extends Component{
    constructor(props){
@@ -14,7 +14,7 @@ import { checkoutCart, placeOrder } from '../store/product'
     render(){
         console.log('cart:', this.props.cart)
         let arr = window.localStorage.getItem('cart').split('-')
-
+        const that=this
         const cart = this.props.cart
         const newcart = function newcart(arg){
           let obj = {}
@@ -49,6 +49,12 @@ import { checkoutCart, placeOrder } from '../store/product'
           return total
         }
 
+        function deleteFromCart(quantity,item){
+          quantity=parseInt(quantity)
+          for(let i=0;i<quantity;i++){
+            that.props.decreaseByOne(item)
+          }
+        }
         let finalCart = turnToArray(objcart)
         let quantity = totalQuantity(finalCart)
         let finalPrice = totalPrice(finalCart)
@@ -57,7 +63,7 @@ import { checkoutCart, placeOrder } from '../store/product'
         let city;
         let state;
         let zipcode;
-
+console.log("o")
         return (
            <div>
              <tr>
@@ -69,10 +75,19 @@ import { checkoutCart, placeOrder } from '../store/product'
             <div>
             {
             finalCart.length > 0 && finalCart.map((item) => {
+              console.log("quantity",item.split('/')[1])
               return (<tr key={item.id}>
                       <th>{item.split('/')[0].split('-')[3]}</th>
                       <th>{item.split('/')[0].split('-')[2]}</th>
                       <th>{item.split('/')[1]}</th>
+                      <button onClick={(e)=>{
+                        console.log("finalcart",finalCart,"prosp car",cart)
+                        this.props.increaseByOne(item.split('/')[0])
+                    }}>+</button>
+                      <button onClick={(e)=>{
+                        this.props.decreaseByOne(item.split('/')[0])
+                      }}>-</button>
+                        <button onClick={(e)=>{deleteFromCart(item.split('/')[1],item.split('/')[0])}}>Remove From Cart</button>
                     </tr>)
             })
             }
@@ -125,7 +140,7 @@ const mapStateToProps = state => {
     return {user: state.user, cart: state.product.cart}
  }
 
- const mapDispatchToProps = ({ checkoutCart, placeOrder })
+ const mapDispatchToProps = ({ checkoutCart, placeOrder,increaseByOne, decreaseByOne })
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)

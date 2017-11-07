@@ -2644,6 +2644,8 @@ module.exports = defaults;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.decreaseQuantity = decreaseQuantity;
+exports.increaseQuantity = increaseQuantity;
 exports.placeNewOrder = placeNewOrder;
 exports.checkout = checkout;
 exports.getProductList = getProductList;
@@ -2652,6 +2654,8 @@ exports.addProduct = addProduct;
 exports.deleteProduct = deleteProduct;
 exports.addToCart = addToCart;
 exports.getOrderHistory = getOrderHistory;
+exports.decreaseByOne = decreaseByOne;
+exports.increaseByOne = increaseByOne;
 exports.placeOrder = placeOrder;
 exports.checkoutCart = checkoutCart;
 exports.fetchProductList = fetchProductList;
@@ -2679,6 +2683,8 @@ var GET_ORDER_HISTORY = "GET_ORDER_HISTORY";
 var ADD_TO_CART = "ADD_TO_CART";
 var CHECKOUT = "CHECKOUT";
 var PLACE_NEW_ORDER = "PLACE_NEW_ORDER";
+var INCREASE_QUANTITY = "INCREASE_QUANTITY";
+var DECREASE_QUANTITY = "DECREASE_QUANTITY";
 
 var initialState = {
     products: [],
@@ -2689,7 +2695,16 @@ var initialState = {
     newOrder: {}
 
     //ACTION CREATORS
-};function placeNewOrder(order) {
+
+};function decreaseQuantity(item) {
+    var action = { type: DECREASE_QUANTITY, item: item };
+    return action;
+}
+function increaseQuantity(item) {
+    var action = { type: INCREASE_QUANTITY, item: item };
+    return action;
+}
+function placeNewOrder(order) {
     var action = { type: PLACE_NEW_ORDER, order: order };
     return action;
 }
@@ -2728,7 +2743,18 @@ function getOrderHistory(orders) {
 }
 
 //THUNK CREATORS
-
+function decreaseByOne(item) {
+    return function (dispatch) {
+        var action = decreaseQuantity(item);
+        dispatch(action);
+    };
+}
+function increaseByOne(item) {
+    return function (dispatch) {
+        var action = increaseQuantity(item);
+        dispatch(action);
+    };
+}
 function placeOrder(order) {
     return function (dispatch) {
         var action = placeNewOrder(order);
@@ -2816,12 +2842,19 @@ function fetchOrderHistory(userId) {
 
 //REDUCER
 
+
 function reducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
     var action = arguments[1];
 
 
     switch (action.type) {
+
+        case DECREASE_QUANTITY:
+            return Object.assign({}, state, { cart: state.cart.slice(0, state.cart.indexOf(action.item)).concat(state.cart.slice(state.cart.indexOf(action.item) + 1)) });
+
+        case INCREASE_QUANTITY:
+            return Object.assign({}, state, { cart: [].concat(_toConsumableArray(state.cart), [action.item]) });
 
         case PLACE_NEW_ORDER:
             return Object.assign({}, state, { newOrder: action.order });
@@ -10289,7 +10322,7 @@ var Cart = function (_Component) {
 
       console.log('cart:', this.props.cart);
       var arr = window.localStorage.getItem('cart').split('-');
-
+      var that = this;
       var cart = this.props.cart;
       var newcart = function newcart(arg) {
         var obj = {};
@@ -10323,6 +10356,12 @@ var Cart = function (_Component) {
         return total;
       }
 
+      function deleteFromCart(quantity, item) {
+        quantity = parseInt(quantity);
+        for (var i = 0; i < quantity; i++) {
+          that.props.decreaseByOne(item);
+        }
+      }
       var finalCart = turnToArray(objcart);
       var quantity = totalQuantity(finalCart);
       var finalPrice = totalPrice(finalCart);
@@ -10331,7 +10370,7 @@ var Cart = function (_Component) {
       var city = void 0;
       var state = void 0;
       var zipcode = void 0;
-
+      console.log("o");
       return _react2.default.createElement(
         'div',
         null,
@@ -10358,6 +10397,7 @@ var Cart = function (_Component) {
           'div',
           null,
           finalCart.length > 0 && finalCart.map(function (item) {
+            console.log("quantity", item.split('/')[1]);
             return _react2.default.createElement(
               'tr',
               { key: item.id },
@@ -10375,6 +10415,28 @@ var Cart = function (_Component) {
                 'th',
                 null,
                 item.split('/')[1]
+              ),
+              _react2.default.createElement(
+                'button',
+                { onClick: function onClick(e) {
+                    console.log("finalcart", finalCart, "prosp car", cart);
+                    _this2.props.increaseByOne(item.split('/')[0]);
+                  } },
+                '+'
+              ),
+              _react2.default.createElement(
+                'button',
+                { onClick: function onClick(e) {
+                    _this2.props.decreaseByOne(item.split('/')[0]);
+                  } },
+                '-'
+              ),
+              _react2.default.createElement(
+                'button',
+                { onClick: function onClick(e) {
+                    deleteFromCart(item.split('/')[1], item.split('/')[0]);
+                  } },
+                'Remove From Cart'
               )
             );
           })
@@ -10505,7 +10567,7 @@ var mapStateToProps = function mapStateToProps(state) {
   return { user: state.user, cart: state.product.cart };
 };
 
-var mapDispatchToProps = { checkoutCart: _product.checkoutCart, placeOrder: _product.placeOrder };
+var mapDispatchToProps = { checkoutCart: _product.checkoutCart, placeOrder: _product.placeOrder, increaseByOne: _product.increaseByOne, decreaseByOne: _product.decreaseByOne };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
 
@@ -38777,13 +38839,13 @@ var AfterCheckout = function (_Component) {
     _createClass(AfterCheckout, [{
         key: 'render',
         value: function render() {
-            var address = "";
-            var products = [""];
-            var quantity = "";
-            var total = "";
-            console.log("new order", this.props.newOrder);
+            var address = '';
+            var products = [''];
+            var quantity = '';
+            var total = '';
+            console.log('new order', this.props.newOrder);
             if (this.props.newOrder.address) {
-                address = this.props.newOrder.address.split("/");
+                address = this.props.newOrder.address.split('/');
                 products = this.props.newOrder.cart;
                 quantity = this.props.newOrder.quantity;
                 total = this.props.newOrder.total;

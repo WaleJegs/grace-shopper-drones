@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React, {Component} from 'react'
 import { withRouter, Link } from 'react-router-dom';
 import {connect} from 'react-redux'
 
@@ -9,19 +9,19 @@ class AfterCheckout extends Component{
 
 
     render(){
-        let address=""
-        let products=[""]
-        let quantity=""
-        let total=""
-        console.log("new order",this.props.newOrder)
-        if(this.props.newOrder.address){
-        address = this.props.newOrder.address.split("/")    
-        products=this.props.newOrder.cart
-        quantity=this.props.newOrder.quantity
-        total=this.props.newOrder.total
+        let address = ''
+        let products = ['']
+        let quantity = ''
+        let total = ''
+        console.log('new order', this.props.newOrder)
+        if (this.props.newOrder.address){
+        address = this.props.newOrder.address.split('/')
+        products = this.props.newOrder.cart
+        quantity = this.props.newOrder.quantity
+        total = this.props.newOrder.total
         }
-       
-        return(
+
+        return (
             <div>
             <h1>Your Order Has Been Placed!!!</h1>
             <div>shipping address:
@@ -37,7 +37,7 @@ class AfterCheckout extends Component{
               <th> Quantity </th>
             </tr>
             {
-                products.map((product)=>{
+                products.map((product) => {
                     return (<tr key={product.id}>
                         <th>{product.split('/')[0].split('-')[3]}</th>
                         <th>{product.split('/')[0].split('-')[2]}</th>

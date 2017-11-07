@@ -9,7 +9,8 @@ const GET_ORDER_HISTORY = "GET_ORDER_HISTORY"
 const ADD_TO_CART = "ADD_TO_CART"
 const CHECKOUT = "CHECKOUT"
 const PLACE_NEW_ORDER = "PLACE_NEW_ORDER"
-
+const INCREASE_QUANTITY="INCREASE_QUANTITY"
+const DECREASE_QUANTITY="DECREASE_QUANTITY"
 
 const initialState = {
     products: [],
@@ -21,6 +22,15 @@ const initialState = {
 }
 
 //ACTION CREATORS
+
+export function decreaseQuantity(item){
+    const action = { type : DECREASE_QUANTITY, item }
+    return action
+}
+export function increaseQuantity(item){
+    const action = { type : INCREASE_QUANTITY, item }
+    return action
+}
 export function placeNewOrder(order){
     const action = { type: PLACE_NEW_ORDER, order }
     return action
@@ -60,7 +70,18 @@ export function getOrderHistory(orders){
 }
 
 //THUNK CREATORS
-
+export function decreaseByOne(item){
+    return function(dispatch){
+        const action = decreaseQuantity(item)
+        dispatch(action)
+    }
+}
+export function increaseByOne(item){
+    return function(dispatch){
+        const action = increaseQuantity(item)
+        dispatch(action)
+    }
+}
 export function placeOrder(order){
     return function(dispatch){
         const action = placeNewOrder(order)
@@ -147,9 +168,17 @@ export function fetchOrderHistory (userId){
 
 //REDUCER
 
+
+
 export default function reducer(state = initialState, action) {
 
     switch (action.type) {
+        
+        case DECREASE_QUANTITY:
+        return Object.assign({},state,{cart :state.cart.slice(0,state.cart.indexOf(action.item)).concat(state.cart.slice(state.cart.indexOf(action.item)+1))})
+
+        case INCREASE_QUANTITY:
+            return Object.assign({},state,{cart :[...state.cart, action.item]})
 
         case PLACE_NEW_ORDER:
             return Object.assign({}, state, { newOrder: action.order })
