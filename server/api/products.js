@@ -18,7 +18,7 @@ router.get('/:productId', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    if (req.user.isAdmin){
+    if (req.user.isAdmin) {
         Product.create(req.body)
             .then(product => {
                 res.json(product)
@@ -28,9 +28,10 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/:productId', (req, res, next) => {
-    if (req.user.isAdmin){
+    if (req.user.isAdmin) {
         Product.findById(req.params.productId)
             .then(product => {
+                console.log(req.body)
                 product.update(req.body)
                 res.send(200)
             })
@@ -39,7 +40,7 @@ router.put('/:productId', (req, res, next) => {
 })
 
 router.delete('/:productId', (req, res, next) => {
-    if (req.user.isAdmin){
+    if (req.user.isAdmin) {
         Product.findById(req.params.productId)
             .then(product => {
                 product.destroy({});

@@ -7,7 +7,7 @@ import history from './history'
 import {Main, Login, Signup, UserHome} from './components'
 import {me} from './store'
 import  ProductList  from "./components/productList"
-import pList from "./components/pLIst"
+import ProductMgmt from './components/productMgmt'
 import SingleProduct from './components/singleProduct'
 import EditProduct from './components/editProduct'
 import Cart from './components/cart'
@@ -33,7 +33,7 @@ class Routes extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route exact path="/products" component={ProductList} />
-            <Route path="/products/:productId" component={ SingleProduct} />
+            <Route exact path="/products/:productId" component={ SingleProduct} />
             <Route path="/cart" component={Cart} />
             {
               isLoggedIn &&
@@ -44,8 +44,8 @@ class Routes extends Component {
                   { isAdmin &&
                       <Switch>
                         <Route path ="/userManagement" component = {ProductList} />
-                        <Route path ="/productManagement" component = {SingleProduct} />
-                        <Route path ="/products/edit/:productId" componenet = {EditProduct} />
+                        <Route path ="/productManagement" component = {ProductMgmt} />
+                        <Route exact path ="/products/edit/:productId" component = {EditProduct} />
                       </Switch>
                   }
                 </Switch>

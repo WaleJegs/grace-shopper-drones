@@ -22,9 +22,6 @@ class productMgmt extends Component{
                     <div key= {product.id}>
                         <li >
                           {`Product Name: ${product.name}`} <br />
-                          {`Product Price: ${product.price}`}<br />
-                          {`Stock: ${product.quantity}`} <br />
-                          {`Description: ${product.description}`} <br />
                         </li>
                         <Link to={`/products/edit/${product.id}`}>
                           <img src={product.picture} />
