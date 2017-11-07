@@ -6,10 +6,12 @@ function Review (props) {
     return (
     <div className='review'>
         <div className='review-stars'>
-            Rating: {props.review.stars}
+            <span className='label'> Rating: </span>
+            <span> {props.review.stars} </span>
         </div>
         <div className='review-text'>
-            Comments: {props.review.text}
+            <span className='label'> Comments: </span>
+            <span> {props.review.text} </span>
         </div>
     </div>
     )
