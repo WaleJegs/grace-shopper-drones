@@ -1182,6 +1182,8 @@ function addProductThunk(product) {
         }).then(function (newProduct) {
             var action = addProduct(newProduct);
             dispatch(action);
+            _history2.default.push('/products');
+            _history2.default.push('/productManagement');
         });
     };
 }
@@ -10981,7 +10983,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -11005,59 +11007,142 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var productMgmt = function (_Component) {
-    _inherits(productMgmt, _Component);
+  _inherits(productMgmt, _Component);
 
-    function productMgmt(props) {
-        _classCallCheck(this, productMgmt);
+  function productMgmt(props) {
+    _classCallCheck(this, productMgmt);
 
-        return _possibleConstructorReturn(this, (productMgmt.__proto__ || Object.getPrototypeOf(productMgmt)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (productMgmt.__proto__ || Object.getPrototypeOf(productMgmt)).call(this, props));
+
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    return _this;
+  }
+
+  _createClass(productMgmt, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.fetchProductList();
     }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(evt) {
+      evt.preventDefault();
+      var product = {
+        name: evt.target.productName.value,
+        price: evt.target.price.value,
+        picture: evt.target.picture.value,
+        description: evt.target.description.value,
+        quantity: evt.target.quantity.value
+      };
+      var check = true;
+      for (var attr in product) {
+        if (product[attr] === '') check = false;
+      }
+      if (check) this.props.addProductThunk(product);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'form',
+          { onSubmit: this.handleSubmit },
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'label',
+              null,
+              ' Product Name '
+            ),
+            _react2.default.createElement('input', { placeholder: 'name', type: 'text', name: 'productName' })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'label',
+              null,
+              ' Price '
+            ),
+            _react2.default.createElement('input', { placeholder: 'price', type: 'text', name: 'price' })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'label',
+              null,
+              ' Picture '
+            ),
+            _react2.default.createElement('input', { placeholder: 'picture', type: 'text', name: 'picture' })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'label',
+              null,
+              ' Description '
+            ),
+            _react2.default.createElement('input', { placeholder: 'description', type: 'text', name: 'description' })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'label',
+              null,
+              ' Quantity '
+            ),
+            _react2.default.createElement('input', { placeholder: 'quantity', type: 'text', name: 'quantity' })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'button',
+              { type: 'submit' },
+              ' Add Product '
+            )
+          )
+        ),
+        this.props.listOfProducts.length && this.props.listOfProducts.map(function (product) {
+          return _react2.default.createElement(
+            'div',
+            { key: product.id },
+            _react2.default.createElement(
+              'li',
+              null,
+              'Product Name: ' + product.name,
+              ' ',
+              _react2.default.createElement('br', null)
+            ),
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/products/edit/' + product.id },
+              _react2.default.createElement('img', { src: product.picture })
+            ),
+            ' ',
+            _react2.default.createElement('br', null),
+            ' ',
+            _react2.default.createElement('br', null)
+          );
+        })
+      );
+    }
+  }]);
 
-    _createClass(productMgmt, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.props.fetchProductList();
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                'div',
-                null,
-                this.props.listOfProducts.length && this.props.listOfProducts.map(function (product) {
-                    return _react2.default.createElement(
-                        'div',
-                        { key: product.id },
-                        _react2.default.createElement(
-                            'li',
-                            null,
-                            'Product Name: ' + product.name,
-                            ' ',
-                            _react2.default.createElement('br', null)
-                        ),
-                        _react2.default.createElement(
-                            _reactRouterDom.Link,
-                            { to: '/products/edit/' + product.id },
-                            _react2.default.createElement('img', { src: product.picture })
-                        ),
-                        ' ',
-                        _react2.default.createElement('br', null),
-                        ' ',
-                        _react2.default.createElement('br', null)
-                    );
-                })
-            );
-        }
-    }]);
-
-    return productMgmt;
+  return productMgmt;
 }(_react.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
-    return { listOfProducts: state.product.products };
+  return { listOfProducts: state.product.products };
 };
 
-var mapDispatchToProps = { fetchProductList: _product.fetchProductList };
+var mapDispatchToProps = { fetchProductList: _product.fetchProductList, addProductThunk: _product.addProductThunk };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(productMgmt);
 

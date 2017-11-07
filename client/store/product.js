@@ -124,6 +124,8 @@ export function addProductThunk(product) {
             .then(newProduct => {
                 const action = addProduct(newProduct)
                 dispatch(action);
+                history.push('/products')
+                history.push('/productManagement')
             })
     }
 }
