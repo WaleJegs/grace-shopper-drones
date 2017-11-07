@@ -19,3 +19,22 @@ body {
     display: inline-block;
   }
 }
+
+/********************SINGLE PRODUCT STYLES ****************/
+.singleProduct{
+  display:flex;
+  flex-direction:row;
+}
+
+.productImageHolder img{
+  width:100%;
+  height:auto;
+}
+
+.productDetails{
+  width:20%;
+}
+
+.addToCartHolder{
+  width:10%;
+}

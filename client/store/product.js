@@ -1,4 +1,5 @@
 import axios from 'axios'
+import history from '../history'
 
 //ACTION TYPES
 const GET_PRODUCT_LIST = "GET_PRODUCT_LIST"
@@ -11,6 +12,7 @@ const CHECKOUT = "CHECKOUT"
 const PLACE_NEW_ORDER = "PLACE_NEW_ORDER"
 const INCREASE_QUANTITY="INCREASE_QUANTITY"
 const DECREASE_QUANTITY="DECREASE_QUANTITY"
+const EDIT_PRODUCT = 'EDIT_PRODUCT';
 
 const initialState = {
     products: [],
@@ -64,8 +66,13 @@ export function addToCart(product) {
     return action;
 }
 
-export function getOrderHistory(orders){
-    const action = { type: GET_ORDER_HISTORY, orders}
+export function getOrderHistory(orders) {
+    const action = { type: GET_ORDER_HISTORY, orders }
+    return action;
+}
+
+export function editProduct(product) {
+    const action = { type: EDIT_PRODUCT, product }
     return action;
 }
 
@@ -103,6 +110,19 @@ export function checkoutCart(cart, userId,address) {
     }
 }
 
+export function editProductThunk(productId, update) {
+    return function thunk(dispatch) {
+        return axios.put(`/api/products/${productId}`, update)
+            .then(res => res.data)
+            .then(newProduct => {
+                const action = editProduct(newProduct)
+                dispatch(action)
+            })
+            .then(() => {
+                history.push('/productManagement')
+            })
+    }
+}
 
 export function fetchProductList() {
     return function thunk(dispatch) {
@@ -140,6 +160,8 @@ export function addProductThunk(product) {
             .then(newProduct => {
                 const action = addProduct(newProduct)
                 dispatch(action);
+                history.push('/products')
+                history.push('/productManagement')
             })
     }
 }
@@ -152,11 +174,14 @@ export function deleteProductThunk(productId) {
                 const action = deleteProduct(deletedProduct)
                 dispatch(action)
             })
+            .then(() => {
+                history.push('/productManagement')
+            })
     }
 }
 
-export function fetchOrderHistory (userId){
-    return function thunk(dispatch){
+export function fetchOrderHistory(userId) {
+    return function thunk(dispatch) {
         return axios.get(`/api/users/${userId}/orderHistory`)
             .then(res => res.data)
             .then(orders => {
@@ -196,10 +221,10 @@ export default function reducer(state = initialState, action) {
             return Object.assign({}, state, { newProduct: action.newProduct })
 
         case GET_SINGLE_PRODUCT:
-            return Object.assign({}, state, {singleProduct: action.product})
-        
+            return Object.assign({}, state, { singleProduct: action.product })
+
         case GET_ORDER_HISTORY:
-            return Object.assign({}, state, {orderHistory: action.orders})
+            return Object.assign({}, state, { orderHistory: action.orders })
 
         default:
             return state

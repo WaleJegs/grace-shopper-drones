@@ -25,7 +25,7 @@ module.exports = app
 if (process.env.NODE_ENV !== 'production') require('../secrets')
 
 // passport registration
-passport.serializeUser((user, done) => done(null, user.id))
+passport.serializeUser((user, done) => done(null, user.id, user.isAdmin))
 passport.deserializeUser((id, done) =>
     db.models.user.findById(id)
     .then(user => done(null, user))

@@ -25,16 +25,32 @@ router.get('/:userId', (req, res, next) => {
         .catch(next);
 });
 
-//get all the user's orders
+//get all orders if user is admin, otherwise get just orders for the logged in user
 router.get('/:userId/orderHistory', (req, res, next) => {
-    Order.findAll({
-        where: {
-            userId: Number(req.params.userId)
-        }, 
-        include: [{ all: true }]
-    })
-    .then(orders => res.send(orders))
-    .catch(next);
+    User.findById(req.params.userId)
+        .then(foundUser => {
+            if (Number(req.session.passport.user) === Number(req.params.userId) && foundUser.dataValues.isAdmin) {
+                console.log('admin user');
+                Order.findAll({
+                    include: [{ all: true }]
+                })
+                .then(orders => res.send(orders))
+                .catch(next);
+            }
+            else if (Number(req.session.passport.user) === Number(req.params.userId)) {
+                console.log('reulgar user');
+                Order.findAll({
+                    where: {
+                        userId: Number(req.params.userId)
+                    }, 
+                    include: [{ all: true }]
+                })
+                .then(orders => res.send(orders))
+                .catch(next);
+            } else {
+                res.send([]);
+            }
+        })
 })
 
 router.post('/', (req, res, next) => {
