@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { withRouter, Link } from 'react-router-dom';
 import {connect} from 'react-redux'
 import Review from './review'
+import WriteReview from './writeReview'
 
 class ReviewList extends Component{
     constructor (props) {
@@ -11,16 +12,17 @@ class ReviewList extends Component{
     render () {
         return (
             <div>
-                <h1> Product Reviews </h1>
-                {this.props.listOfReviews ? 
+                <h1> Reviews </h1>
+                {this.props.listOfReviews && this.props.listOfReviews.length > 0 ? 
                 this.props.listOfReviews.map(review => {
                     return (
                         <Review key={review.id} review={review} />
                     )
                 }) 
                 : 
-                <div> No Reviews Yet </div>
+                <div> No reviews for this product yet. </div>
                 }
+                <WriteReview />
 
             </div>
         )

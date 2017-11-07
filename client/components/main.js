@@ -13,8 +13,8 @@ import {logout} from '../store'
 const Main = (props) => {
   const {children, handleClick, isLoggedIn, isAdmin} = props
   return (
-    <div>
-      <h1>Drone Shop</h1>
+    <div className='main'>
+      <h1>! Drone Zone !</h1>
       <nav>
         {
           isLoggedIn
