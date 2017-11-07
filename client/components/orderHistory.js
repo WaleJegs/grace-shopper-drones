@@ -8,11 +8,11 @@ class orderHistory extends Component {
     }
 
     componentDidMount () {
-        this.props.fetchOrderHistory(4);
+        this.props.fetchOrderHistory(this.props.user.id);
     }
 
     render () {
-        console.log('props:', this.props);
+        console.log('props: ', this.props);
         return (
             <div>
                 <h1> Order History </h1>
@@ -40,7 +40,10 @@ class orderHistory extends Component {
 }
 
 const mapStateToProps = state => {
-    return { orderHistory: state.product.orderHistory }
+    return { 
+        orderHistory: state.product.orderHistory, 
+        user: state.user
+        }
 }
 
 const mapDispatchToProps = ({fetchOrderHistory});
