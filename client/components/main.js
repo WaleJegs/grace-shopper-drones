@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
 import {logout} from '../store'
-
+import {saveCartThunk,fetchUserCartThunk} from '../store/product'
 /**
  * COMPONENT
  *  The Main component is our 'picture frame' - it displays the navbar and anything
@@ -11,10 +11,12 @@ import {logout} from '../store'
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const {children, handleClick, isLoggedIn, isAdmin} = props
+
+  const {children, handleClick, isLoggedIn, isAdmin,id,cart} = props
+ 
   return (
-    <div>
-      <h1>Drone Shop</h1>
+    <div className='main'>
+      <h1>! Drone Zone !</h1>
       <nav>
         {
           isLoggedIn
@@ -24,8 +26,9 @@ const Main = (props) => {
               ?
               <div>
               <Link to="/home">Home</Link>
-              <a href="#" onClick={handleClick}>Logout</a>
+              <a href="#" onClick={(event) => handleClick(event, cart, id)}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               <Link to="/userManagement"> Manage Users </Link>
                <Link to="/productManagement"> Manage Products </Link>
@@ -34,8 +37,9 @@ const Main = (props) => {
               :
               <div>
               <Link to="/home">Home</Link>
-              <a href="#" onClick={handleClick}>Logout</a>
+              <a href="#" onClick={(event) => handleClick(event, cart, id)}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               </div> }
             </div>
@@ -60,14 +64,18 @@ const Main = (props) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin
+   isAdmin: state.user.isAdmin || false,
+    cart: state.product.cart,
+    id: state.user.id
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
-    handleClick () {
+    handleClick (event,cart,id) {
+      dispatch(saveCartThunk(cart,id))
       dispatch(logout())
+      
     }
   }
 }

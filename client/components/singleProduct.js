@@ -33,26 +33,29 @@ class SingleProduct extends Component{
 
         return (
             <div className='singleProduct'>
-                <div className='productImageHolder'>
-                    <img src={product.picture} />
-                </div>
-                <div className='productDetails'>
-                    <div>
-                        <span className='label'> Name: </span> 
-                        <span > {product.name} </span>
+                <div className='singleProduct-imageAndDetails'>
+                    <div className='productImageHolder'>
+                        <img src={product.picture} />
                     </div>
-                    <div>
-                        <span className='label'> Price: </span> 
-                        <span> {product.price} </span>
-                    </div>
-                    <div>
-                        <span className='label'> Description: </span> 
-                        <span> {product.description} </span> 
+                    <div className='productDetails'>
+                        <div>
+                            <span className='label'> Name: </span> 
+                            <span> {product.name} </span>
+                        </div>
+                        <div>
+                            <span className='label'> Price: </span> 
+                            <span> {product.price} </span>
+                        </div>
+                        <div>
+                            <span className='label'> Description: </span> 
+                            <span> {product.description} </span> 
+                        </div>
                     </div>
                 </div>
                 <div className='addToCartHolder'> 
                     <button onClick={this.handleClick}>Add To Cart </button>
                 </div>
+                <hr/>
                 <div className='reviewList'>
                     <ReviewList />
                 </div>

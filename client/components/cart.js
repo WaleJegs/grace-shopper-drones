@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import axios from 'axios'
 import {auth} from '../store/user'
 import {connect} from 'react-redux'
-import { checkoutCart, placeOrder,increaseByOne ,decreaseByOne} from '../store/product'
+import { checkoutCart, placeOrder,increaseByOne ,decreaseByOne,fetchUserCartThunk} from '../store/product'
 
  class Cart extends Component{
    constructor(props){
@@ -66,13 +66,14 @@ import { checkoutCart, placeOrder,increaseByOne ,decreaseByOne} from '../store/p
 console.log("o")
         return (
            <div>
+            <table>
              <tr>
               <th> Product name </th>
               <th> Price </th>
               <th> Quantity </th>
             </tr>
 
-            <div>
+           
             {
             finalCart.length > 0 && finalCart.map((item) => {
               console.log("quantity",item.split('/')[1])
@@ -91,7 +92,9 @@ console.log("o")
                     </tr>)
             })
             }
-            </div>
+            
+           
+            </table>
             <div>Quantity:{quantity}</div>
             <div>Total:{finalPrice}</div>
 

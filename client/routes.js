@@ -16,13 +16,16 @@ import AfterCheckout from './components/afterCheckout'
 import OrderMgmt from './components/orderMgmt'
 import completedOrder from './components/completedOrder';
 import pendingOrder from './components/pendingOrder';
-
+import {fetchProductList} from './store/product'
 /**
  * COMPONENT
  */
 class Routes extends Component {
   componentDidMount () {
+    
     this.props.loadInitialData()
+    
+   
   }
 
   render () {
@@ -85,6 +88,7 @@ const mapDispatch = (dispatch) => {
   return {
     loadInitialData () {
       dispatch(me())
+      dispatch(fetchProductList())
     }
   }
 }

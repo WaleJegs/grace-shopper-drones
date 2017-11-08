@@ -13,6 +13,8 @@ const PLACE_NEW_ORDER = "PLACE_NEW_ORDER"
 const INCREASE_QUANTITY="INCREASE_QUANTITY"
 const DECREASE_QUANTITY="DECREASE_QUANTITY"
 const EDIT_PRODUCT = 'EDIT_PRODUCT';
+const GET_USER_CART= 'GET_USER_CART'
+const SAVE_CART= 'SAVE_CART'
 
 const initialState = {
     products: [],
@@ -24,6 +26,15 @@ const initialState = {
 }
 
 //ACTION CREATORS
+export function saveCart(cart){
+    const action = { type: SAVE_CART, cart}
+    return action
+}
+
+export function getUserCart(cart){
+    const action = { type: GET_USER_CART, cart}
+    return action
+}
 
 export function decreaseQuantity(item){
     const action = { type : DECREASE_QUANTITY, item }
@@ -77,6 +88,36 @@ export function editProduct(product) {
 }
 
 //THUNK CREATORS
+export function saveCartThunk(cart,userId){
+    var result = {"products" : {} }
+    cart.map(product => result.products[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
+    return function(dispatch){
+        return axios.post('/api/users/saveCart',result)
+        .then(res=>res.data)
+        .then(() => {           
+            const action = checkout([]);
+            dispatch(action)
+        });
+    }
+}
+
+// export function fetchUserCartThunk(userId){
+//     return function(dispatch){
+//         return axios.get('/api/order')
+//         .then(res => res.data)
+//         .then(cart=>{
+//             cart=cart.filter((order)=> order.userId===userId && order.status==='pending')
+//             console.log("orderid",cart[0])
+//             return cart[0]
+//             // const action=getUserCart(cart)
+//             // dispatch(action)
+//         })   
+//         .then((cart)=>{
+//             axios.get('/api/order/getall')
+//             .
+//         })    
+//     }
+// }
 export function decreaseByOne(item){
     return function(dispatch){
         const action = decreaseQuantity(item)
@@ -198,7 +239,9 @@ export function fetchOrderHistory(userId) {
 export default function reducer(state = initialState, action) {
 
     switch (action.type) {
-        
+        case GET_USER_CART:
+        return Object.assign({},state,{cart :action.cart})
+
         case DECREASE_QUANTITY:
         return Object.assign({},state,{cart :state.cart.slice(0,state.cart.indexOf(action.item)).concat(state.cart.slice(state.cart.indexOf(action.item)+1))})
 
