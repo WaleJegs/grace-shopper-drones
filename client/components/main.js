@@ -26,6 +26,7 @@ const Main = (props) => {
               <Link to="/home">Home</Link>
               <a href="#" onClick={handleClick}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               <Link to="/userManagement"> Manage Users </Link>
                <Link to="/productManagement"> Manage Products </Link>
@@ -35,6 +36,7 @@ const Main = (props) => {
               <Link to="/home">Home</Link>
               <a href="#" onClick={handleClick}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               </div> }
             </div>
@@ -59,7 +61,7 @@ const Main = (props) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin || false
   }
 }
 
