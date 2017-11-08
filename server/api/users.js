@@ -2,6 +2,9 @@ const router = require('express').Router()
 const { User, Product, Order, orderProducts } = require('../db/models')
 module.exports = router
 
+
+
+
 router.get('/', (req, res, next) => {
     User.findAll({
             // explicitly select only the id and email fields - even though
@@ -10,10 +13,12 @@ router.get('/', (req, res, next) => {
             attributes: ['id', 'email']
         })
         .then(users => {
+            console.log("logged in",users)
             res.json(users)
         })
         .catch(next)
 })
+
 
 router.get('/:userId', (req, res, next) => {
     User.findById(req.params.userId, {
@@ -24,6 +29,7 @@ router.get('/:userId', (req, res, next) => {
         })
         .catch(next);
 });
+
 
 //get all orders if user is admin, otherwise get just orders for the logged in user
 router.get('/:userId/orderHistory', (req, res, next) => {
@@ -77,10 +83,37 @@ router.delete('/:userId', (req, res, next) => {
         .catch(next);
 });
 
+router.post('/saveCart',(req,res,next)=>{
+    Order.create({  
+        userId: req.session.passport.user,
+        status: 'pending'
+    })
+    .then(order => {
+        return Product.findAll({
+                where: {
+                    id: {
+                        $in: Object.keys(req.body.products).map(key => parseInt(key))
+                    }
+                }
+            })
+            .then(products => {
+                return products.map(pro => order.addProduct(pro, { through: { quantity: req.body.products[pro.id], price: pro.price, userId: req.params.userId } }))
+            })
+            .then(ops => {
+                return Promise.all(ops)
+            })
+    })
+    .then(orderProducts => {
+        res.json(orderProducts)
+    })
+    .catch(next)
+})
+
+
 router.post('/:userId/cart', (req, res, next) => {
     Order.create({
             userId: req.params.userId,
-            status: 'paid',
+            status: 'complete',
             address: req.body.userInfo.address
         })
         .then(order => {
@@ -102,3 +135,4 @@ router.post('/:userId/cart', (req, res, next) => {
             res.json(orderProducts)
         })
 })
+
