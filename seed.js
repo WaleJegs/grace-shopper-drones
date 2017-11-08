@@ -5,7 +5,6 @@ const { User } = require('./server/db/models')
 const { Order } = require('./server/db/models')
 const { OrderProduct } = require('./server/db/models')
 const { Review } = require('./server/db/models')
-
 db.sync({ force: true })
     .then(() => {
         console.log('Seeding database')
@@ -91,7 +90,7 @@ db.sync({ force: true })
             price: 15,
             quantity: 2,
             productId: 1,
-            orderId: 1 
+            orderId: 1
         }, {
             price: 30,
             quantity: 4,
