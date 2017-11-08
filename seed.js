@@ -46,7 +46,7 @@ db.sync({ force: true })
         }, {
             name: 'Endurance Drone',
             price: 5000,
-            picture: 'https://skyfront.com/wp-content/uploads/2017/09/Tailwind-Iso-1030x469.pnghttps://cdn.technologyreview.com/i/images/deliverydrone.jpg?sw=1400',
+            picture: "https://3dr.com/wp-content/uploads/2017/03/Solo_r10c-1024x443.jpg",
             description: 'Tailwind hybrid electric drone with 4.5 hours endurance and 3 kg payload capacity',
             quantity: 1000
         }, {
