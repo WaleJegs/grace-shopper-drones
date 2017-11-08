@@ -30,9 +30,8 @@ const Main = (props) => {
               <Link to ="/products">Products</Link>
               <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
-              <Link to="/userManagement"> Manage Users </Link>
-               <Link to="/productManagement"> Manage Products </Link>
-               <Link to="/orderManagement"> Manage Orders </Link>
+              <Link to="/productManagement"> Manage Products </Link>
+              <Link to="/orderManagement"> Manage Orders </Link>
               </div>
               :
               <div>

@@ -66,16 +66,24 @@ db.sync({ force: true })
     .then(() => {
         return Order.bulkCreate([{
             userId: 1,
-            status: 'complete'
+            status: 'complete',
+            address: '10604/Seattle/WA/98104'
         }, {
             userId: 2,
-            status: 'complete'
+            status: 'complete',
+            address: '10604/Everett/WA/98104'
         }, {
             userId: 3,
-            status: 'complete'
+            status: 'complete',
+            address: '10604/New York/NY/10031'
         }, {
             userId: 1,
-            status: 'complete'
+            status: 'complete',
+            address: '6550/Raliehg/NC/89456'
+        }, {
+            userId: 2,
+            status: 'pending',
+            address: '456 Park/Baton Rouge/78465'
         }])
     })
     .then(() => {
@@ -99,6 +107,21 @@ db.sync({ force: true })
             quantity: 5,
             productId: 4,
             orderId: 2
+        }, {
+            price: 30,
+            quantity: 4,
+            productId: 4,
+            orderId: 3
+        }, {
+            price: 150,
+            quantity: 5,
+            productId: 2,
+            orderId: 4
+        }, {
+            price: 150,
+            quantity: 5,
+            productId: 2,
+            orderId: 5
         }])
     })
     .then(() => {
