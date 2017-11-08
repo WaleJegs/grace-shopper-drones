@@ -9,6 +9,9 @@ const Order = db.define('order', {
     status: {
         type: Sequelize.STRING,
         defaultValue: 'pending'
+    },
+    address: {
+        type: Sequelize.STRING
     }
 })
 

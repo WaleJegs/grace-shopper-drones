@@ -1,34 +1,20 @@
 import React,{Component} from 'react'
 import { withRouter, Link } from 'react-router-dom';
 import {connect} from 'react-redux'
-// import {fetchProductList} from '../store/product'
 
-
-class Review extends Component{
-    constructor(props){
-        super(props)
-    }
-    
-    componentDidMount(){
-    
-    }
-
-
-    render(){
-
-        return (
-            <div>
-                
+function Review (props) {
+    return (
+    <div className='review'>
+        <div className='review-stars'>
+            <span className='label'> Rating: </span>
+            <span> {props.review.stars} </span>
         </div>
-        )
-    }
+        <div className='review-text'>
+            <span className='label'> Comments: </span>
+            <span> {props.review.text} </span>
+        </div>
+    </div>
+    )
 }
 
-
-const mapStateToProps = state => {
-   return {  }
-}
-
-const mapDispatchToProps = ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Review)
+export default Review;

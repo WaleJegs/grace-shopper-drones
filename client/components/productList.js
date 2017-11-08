@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import { withRouter, Link } from 'react-router-dom';
 import {connect} from 'react-redux'
-import {fetchProductList} from '../store/product'
+import {fetchProductList,fetchUserCartThunk} from '../store/product'
 
 
 class productList extends Component{
@@ -9,21 +9,24 @@ class productList extends Component{
         super(props)
     }
     
-    componentDidMount(){
-      this.props.fetchProductList()   
-    }
-
     render(){
         return (
-            <div>
+            <div className='productList'>
             {
                 this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
                     return (
-                    <div key= {product.id}>
+                    <div className='productList-product' key= {product.id}>
                       <Link to={`/products/${product.id}`}>
-                        <li >
-                        {"Product Name: " + product.name + ' ' +"Product Price: " +product.price}
-                        </li>
+                        <div>
+                            <div>
+                                <span className='label'> Name: </span>
+                                <span> {product.name} </span>
+                            </div>
+                            <div>
+                                <span className='label'> Price: </span>
+                                <span> {product.price} </span>
+                            </div>
+                        </div>
                         <img src={product.picture} />
                       </Link>
                      
@@ -37,9 +40,9 @@ class productList extends Component{
 
 
 const mapStateToProps = state => {
-   return { listOfProducts: state.product.products }
+   return { listOfProducts: state.product.products,id:state.user.id }
 }
 
-const mapDispatchToProps = ({fetchProductList})
+const mapDispatchToProps = ({fetchProductList,fetchUserCartThunk})
 
 export default connect(mapStateToProps, mapDispatchToProps)(productList)

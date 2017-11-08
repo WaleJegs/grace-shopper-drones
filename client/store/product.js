@@ -1,25 +1,53 @@
 import axios from 'axios'
+import history from '../history'
 
 //ACTION TYPES
 const GET_PRODUCT_LIST = "GET_PRODUCT_LIST"
 const ADD_PRODUCT = "ADD_PRODUCT"
-const DELETE_PRODUCT="DELETE_PRODUCT"
-const GET_SINGLE_PRODUCT="GET_SINGLE_PRODUCT"
-const GET_ORDER_HISTORY="GET_ORDER_HISTORY"
-const ADD_TO_CART="ADD_TO_CART"
-const CHECKOUT = 'CHECKOUT'
-
-
+const DELETE_PRODUCT = "DELETE_PRODUCT"
+const GET_SINGLE_PRODUCT = "GET_SINGLE_PRODUCT"
+const GET_ORDER_HISTORY = "GET_ORDER_HISTORY"
+const ADD_TO_CART = "ADD_TO_CART"
+const CHECKOUT = "CHECKOUT"
+const PLACE_NEW_ORDER = "PLACE_NEW_ORDER"
+const INCREASE_QUANTITY="INCREASE_QUANTITY"
+const DECREASE_QUANTITY="DECREASE_QUANTITY"
+const EDIT_PRODUCT = 'EDIT_PRODUCT';
+const GET_USER_CART= 'GET_USER_CART'
+const SAVE_CART= 'SAVE_CART'
 
 const initialState = {
     products: [],
     singleProduct: {},
     newProduct: {},
     cart: [],
-    orderHistory: []
+    orderHistory: [],
+    newOrder: {}
 }
 
 //ACTION CREATORS
+export function saveCart(cart){
+    const action = { type: SAVE_CART, cart}
+    return action
+}
+
+export function getUserCart(cart){
+    const action = { type: GET_USER_CART, cart}
+    return action
+}
+
+export function decreaseQuantity(item){
+    const action = { type : DECREASE_QUANTITY, item }
+    return action
+}
+export function increaseQuantity(item){
+    const action = { type : INCREASE_QUANTITY, item }
+    return action
+}
+export function placeNewOrder(order){
+    const action = { type: PLACE_NEW_ORDER, order }
+    return action
+}
 export function checkout(cart) {
     const action = { type: CHECKOUT, cart }
     return action;
@@ -49,26 +77,93 @@ export function addToCart(product) {
     return action;
 }
 
-export function getOrderHistory(orders){
-    const action = { type: GET_ORDER_HISTORY, orders}
+export function getOrderHistory(orders) {
+    const action = { type: GET_ORDER_HISTORY, orders }
+    return action;
+}
+
+export function editProduct(product) {
+    const action = { type: EDIT_PRODUCT, product }
     return action;
 }
 
 //THUNK CREATORS
-export function checkoutCart(cart, userId) {
-    var result = {}
-    cart.map(product => result[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
+export function saveCartThunk(cart,userId){
+    var result = {"products" : {} }
+    cart.map(product => result.products[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
+    return function(dispatch){
+        return axios.post('/api/users/saveCart',result)
+        .then(res=>res.data)
+        .then(() => {           
+            const action = checkout([]);
+            dispatch(action)
+        });
+    }
+}
 
+// export function fetchUserCartThunk(userId){
+//     return function(dispatch){
+//         return axios.get('/api/order')
+//         .then(res => res.data)
+//         .then(cart=>{
+//             cart=cart.filter((order)=> order.userId===userId && order.status==='pending')
+//             console.log("orderid",cart[0])
+//             return cart[0]
+//             // const action=getUserCart(cart)
+//             // dispatch(action)
+//         })   
+//         .then((cart)=>{
+//             axios.get('/api/order/getall')
+//             .
+//         })    
+//     }
+// }
+export function decreaseByOne(item){
+    return function(dispatch){
+        const action = decreaseQuantity(item)
+        dispatch(action)
+    }
+}
+export function increaseByOne(item){
+    return function(dispatch){
+        const action = increaseQuantity(item)
+        dispatch(action)
+    }
+}
+export function placeOrder(order){
+    return function(dispatch){
+        const action = placeNewOrder(order)
+        dispatch(action)
+    }
+}
+
+export function checkoutCart(cart, userId,address) {
+    var result = {"userInfo" : { 'address': address},
+                "products" : {}}
+    cart.map(product => result.products[parseInt(product.split("/")[0].split('-')[1])] = product.split("/")[1])
     return function thunk(dispatch) {
         return axios.post(`/api/users/${userId}/cart`, result)
             .then(res => res.data)
-            .then(() => {
+            .then(() => {           
                 const action = checkout([]);
                 dispatch(action)
             });
     }
 }
 
+export function editProductThunk(productId, update) {
+    return function thunk(dispatch) {
+        return axios.put(`/api/products/${productId}`, update)
+            .then(res => res.data)
+            .then(newProduct => {
+                const action = editProduct(newProduct)
+                dispatch(action)
+            })
+            .then(() => {
+                history.push('/productManagement')
+            })
+    }
+}
 
 export function fetchProductList() {
     return function thunk(dispatch) {
@@ -106,6 +201,8 @@ export function addProductThunk(product) {
             .then(newProduct => {
                 const action = addProduct(newProduct)
                 dispatch(action);
+                history.push('/products')
+                history.push('/productManagement')
             })
     }
 }
@@ -118,11 +215,14 @@ export function deleteProductThunk(productId) {
                 const action = deleteProduct(deletedProduct)
                 dispatch(action)
             })
+            .then(() => {
+                history.push('/productManagement')
+            })
     }
 }
 
-export function fetchOrderHistory (userId){
-    return function thunk(dispatch){
+export function fetchOrderHistory(userId) {
+    return function thunk(dispatch) {
         return axios.get(`/api/users/${userId}/orderHistory`)
             .then(res => res.data)
             .then(orders => {
@@ -134,9 +234,23 @@ export function fetchOrderHistory (userId){
 
 //REDUCER
 
+
+
 export default function reducer(state = initialState, action) {
 
     switch (action.type) {
+        case GET_USER_CART:
+        return Object.assign({},state,{cart :action.cart})
+
+        case DECREASE_QUANTITY:
+        return Object.assign({},state,{cart :state.cart.slice(0,state.cart.indexOf(action.item)).concat(state.cart.slice(state.cart.indexOf(action.item)+1))})
+
+        case INCREASE_QUANTITY:
+            return Object.assign({},state,{cart :[...state.cart, action.item]})
+
+        case PLACE_NEW_ORDER:
+            return Object.assign({}, state, { newOrder: action.order })
+
         case CHECKOUT:
             return Object.assign({}, state, { cart: action.cart })
 
@@ -150,10 +264,10 @@ export default function reducer(state = initialState, action) {
             return Object.assign({}, state, { newProduct: action.newProduct })
 
         case GET_SINGLE_PRODUCT:
-            return Object.assign({}, state, {singleProduct: action.product})
-        
+            return Object.assign({}, state, { singleProduct: action.product })
+
         case GET_ORDER_HISTORY:
-            return Object.assign({}, state, {orderHistory: action.orders})
+            return Object.assign({}, state, { orderHistory: action.orders })
 
         default:
             return state
