@@ -22,6 +22,7 @@ class ReviewList extends Component{
                 : 
                 <div> No reviews for this product yet. </div>
                 }
+                {console.log('adminstate?---', this.props.isAdmin)}
                 <WriteReview />
 
             </div>
