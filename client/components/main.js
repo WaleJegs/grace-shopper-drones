@@ -12,10 +12,9 @@ import {logout} from '../store'
  */
 const Main = (props) => {
   const {children, handleClick, isLoggedIn, isAdmin} = props
-console.log("isadmin:",isAdmin)
   return (
-    <div>
-      <h1>Drone Shop</h1>
+    <div className='main'>
+      <h1>! Drone Zone !</h1>
       <nav>
         {
           isLoggedIn
@@ -27,6 +26,7 @@ console.log("isadmin:",isAdmin)
               <Link to="/home">Home</Link>
               <a href="#" onClick={handleClick}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               <Link to="/userManagement"> Manage Users </Link>
                <Link to="/productManagement"> Manage Products </Link>
@@ -36,6 +36,7 @@ console.log("isadmin:",isAdmin)
               <Link to="/home">Home</Link>
               <a href="#" onClick={handleClick}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               </div> }
             </div>
@@ -60,7 +61,7 @@ console.log("isadmin:",isAdmin)
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin || false
   }
 }
 

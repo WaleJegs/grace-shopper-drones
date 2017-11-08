@@ -25,16 +25,30 @@ router.get('/:userId', (req, res, next) => {
         .catch(next);
 });
 
-//get all the user's orders
+//get all orders if user is admin, otherwise get just orders for the logged in user
 router.get('/:userId/orderHistory', (req, res, next) => {
-    Order.findAll({
-        where: {
-            userId: Number(req.params.userId)
-        }, 
-        include: [{ all: true }]
-    })
-    .then(orders => res.send(orders))
-    .catch(next);
+    User.findById(req.params.userId)
+        .then(foundUser => {
+            if (Number(req.session.passport.user) === Number(req.params.userId) && foundUser.dataValues.isAdmin) {
+                Order.findAll({
+                    include: [{ all: true }]
+                })
+                .then(orders => res.send(orders))
+                .catch(next);
+            }
+            else if (Number(req.session.passport.user) === Number(req.params.userId)) {
+                Order.findAll({
+                    where: {
+                        userId: Number(req.params.userId)
+                    }, 
+                    include: [{ all: true }]
+                })
+                .then(orders => res.send(orders))
+                .catch(next);
+            } else {
+                res.send([]);
+            }
+        })
 })
 
 router.post('/', (req, res, next) => {
@@ -66,18 +80,19 @@ router.delete('/:userId', (req, res, next) => {
 router.post('/:userId/cart', (req, res, next) => {
     Order.create({
             userId: req.params.userId,
-            status: 'paid'
+            status: 'paid',
+            address: req.body.userInfo.address
         })
         .then(order => {
             return Product.findAll({
                     where: {
                         id: {
-                            $in: Object.keys(req.body).map(key => parseInt(key))
+                            $in: Object.keys(req.body.products).map(key => parseInt(key))
                         }
                     }
                 })
                 .then(products => {
-                    return products.map(pro => order.addProduct(pro, { through: { quantity: req.body[pro.id], price: pro.price, userId: req.params.userId } }))
+                    return products.map(pro => order.addProduct(pro, { through: { quantity: req.body.products[pro.id], price: pro.price, userId: req.params.userId } }))
                 })
                 .then(ops => {
                     return Promise.all(ops)

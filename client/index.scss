@@ -1,21 +1,142 @@
 body {
-  font-family: sans-serif;
+  font-family: 'Maven Pro', Arial, sans-serif;
+  margin: 0;
+  padding:0;
+  background-color:white;
 
   a {
+    color:black;
     text-decoration: none;
+    border:1px solid white;
+  }
+  a:visited { 
+    color:black;
+    text-decoration: none;
+  }
+
+  a:hover{
+    cursor:pointer;
   }
 
   label {
     display: block;
   }
 
+  h1 {
+    text-align: center;
+  }
+
   nav a {
     display: inline-block;
-    margin: 1em;
+    padding: 1em;
+  }
+
+  nav a:hover{
+    background-color:#f1f1f1;
+    border: 1px solid #dfdfdf;
   }
 
   form div {
     margin: 1em;
     display: inline-block;
   }
+}
+input {
+  outline-width: 0;
+  padding:.5em;
+}
+
+button {
+  background-color:#f1f1f1;
+  border: 1px solid #afafaf;
+  padding:.6em 2em .6em 2em;
+}
+
+button:hover {
+  background-color: #dfdfdf;
+  cursor: pointer;
+}
+
+.label {
+  font-weight: 500;
+}
+
+/**********************MAIN ************************/
+.main {
+  width:95%;
+  max-width: 1000px;
+  margin:auto;
+}
+/*********************NAV ***************************/
+nav {
+  text-align:center;
+}
+nav div {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+/********************SINGLE PRODUCT STYLES ****************/
+.singleProduct{
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  max-width:800px;
+  margin:auto;
+}
+
+.singleProduct-imageAndDetails{
+  display: flex;
+  flex-direction:row;
+}
+
+.productDetails div{
+  margin:.2em;
+}
+
+.productImageHolder{
+  width:50%;
+}
+.productImageHolder img{
+  width:100%;
+  height:auto;
+}
+
+.productDetails{
+  padding:.5em;
+  width:40%;
+}
+
+.addToCartHolder button{
+  width:100%;
+}
+
+/******************Reviews **************/
+.review{
+  border-bottom: 1px solid #848484;
+  margin-bottom: 2em;
+}
+
+.write-review{
+  border: 1px solid #848484;
+}
+
+/******************Product List***************/
+.productList {
+  display:flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+}
+
+.productList-product{
+  width:30%;
+  margin:.5em;
+}
+
+.productList-product img{
+  width:100%;
+  height:auto;
 }
