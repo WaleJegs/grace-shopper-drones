@@ -11,6 +11,14 @@ router.get('/', (req, res, next) => {
         .catch(next)
 })
 
+router.get('/getcart',(req,res,next=>{
+    Order.findAll({})
+    .then(orders => {
+        res.json(orders)
+    })
+    .catch(next)
+}))
+
 router.get('/:orderId', (req, res, next) => {
     Order.findById(req.params.orderId)
         .then(order => {

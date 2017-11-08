@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import { withRouter, Link } from 'react-router-dom';
 import {connect} from 'react-redux'
-import {fetchProductList} from '../store/product'
+import {fetchProductList,fetchUserCartThunk} from '../store/product'
 
 
 class productList extends Component{
@@ -10,7 +10,9 @@ class productList extends Component{
     }
     
     componentDidMount(){
+        console.log("useridd",this.props.id)
       this.props.fetchProductList()   
+    //   this.props.fetchUserCartThunk(this.props.id)
     }
 
     render(){
@@ -37,9 +39,9 @@ class productList extends Component{
 
 
 const mapStateToProps = state => {
-   return { listOfProducts: state.product.products }
+   return { listOfProducts: state.product.products,id:state.user.id }
 }
 
-const mapDispatchToProps = ({fetchProductList})
+const mapDispatchToProps = ({fetchProductList,fetchUserCartThunk})
 
 export default connect(mapStateToProps, mapDispatchToProps)(productList)
