@@ -2,18 +2,7 @@ const router = require('express').Router()
 const { User, Product, Order, orderProducts } = require('../db/models')
 module.exports = router
 
-// router.get('/getCart',(req,res,next)=>{
-//     console.log(req.session.passport.user,"ididddddd")
-//      Order.findAll({
-//          include:[{all:true}],
-//          where:{
-//              userId:parseInt(req.session.passport.user),
-//              status:'pending'
-//          }
-//      })
-//      .then(orders => res.send(orders))
-//      .catch(next)
-//  })
+
 
 
 router.get('/', (req, res, next) => {

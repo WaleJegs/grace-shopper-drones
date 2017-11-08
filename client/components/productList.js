@@ -9,28 +9,21 @@ class productList extends Component{
         super(props)
     }
     
-    componentDidMount(){
-        console.log("useridd",this.props.id)
-      this.props.fetchProductList()   
-    //   this.props.fetchUserCartThunk(this.props.id)
-    }
-
     render(){
         return (
-            <div>
+            <div>    
             {
-                this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
-                    return (
-                    <div key= {product.id}>
-                      <Link to={`/products/${product.id}`}>
-                        <li >
-                        {"Product Name: " + product.name + ' ' +"Product Price: " +product.price}
-                        </li>
-                        <img src={product.picture} />
-                      </Link>
-                     
-                    </div>)
-                })
+            this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
+                return (
+                <div key= {product.id}>
+                    <Link to={`/products/${product.id}`}>
+                    <li >
+                    {"Product Name: " + product.name + ' ' +"Product Price: " +product.price}
+                    </li>
+                    <img src={product.picture} />
+                    </Link>                
+                </div>)
+            })
             }
         </div>
         )

@@ -107,11 +107,15 @@ export function saveCartThunk(cart,userId){
 //         .then(res => res.data)
 //         .then(cart=>{
 //             cart=cart.filter((order)=> order.userId===userId && order.status==='pending')
-//             return cart
-//         }) 
+//             console.log("orderid",cart[0])
+//             return cart[0]
+//             // const action=getUserCart(cart)
+//             // dispatch(action)
+//         })   
 //         .then((cart)=>{
-//             axios.get()
-//         })      
+//             axios.get('/api/order/getall')
+//             .
+//         })    
 //     }
 // }
 export function decreaseByOne(item){
