@@ -1,18 +1,21 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Router} from 'react-router'
-import {Route, Switch,Link} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
 import {Main, Login, Signup, UserHome} from './components'
 import {me} from './store'
-import  ProductList  from "./components/productList"
+import  ProductList  from './components/productList'
 import ProductMgmt from './components/productMgmt'
 import SingleProduct from './components/singleProduct'
 import EditProduct from './components/editProduct'
 import Cart from './components/cart'
 import OrderHistory from './components/orderHistory'
 import AfterCheckout from './components/afterCheckout'
+import OrderMgmt from './components/orderMgmt'
+import completedOrder from './components/completedOrder';
+import pendingOrder from './components/pendingOrder';
 import {fetchProductList} from './store/product'
 /**
  * COMPONENT
@@ -39,7 +42,7 @@ class Routes extends Component {
             <Route exact path="/products" component={ProductList} />
             <Route exact path="/products/:productId" component={ SingleProduct} />
             <Route path="/cart" component={Cart} />
-           
+
             {
               isLoggedIn &&
                 <Switch>
@@ -52,6 +55,9 @@ class Routes extends Component {
                         <Route path ="/userManagement" component = {ProductList} />
                         <Route path ="/productManagement" component = {ProductMgmt} />
                         <Route path ="/products/edit/:productId" component = {EditProduct} />
+                        <Route path ="/orderManagement" component = {OrderMgmt} />
+                        <Route path="/orders/complete" component = {completedOrder} />
+                        <Route path="/orders/pending" component = {pendingOrder} />
                       </Switch>
                   }
                 </Switch>
