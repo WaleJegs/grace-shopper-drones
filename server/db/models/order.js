@@ -11,7 +11,8 @@ const Order = db.define('order', {
         defaultValue: 'pending'
     },
     address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'Have/Not/Check/Out'
     }
 })
 
