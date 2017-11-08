@@ -36,7 +36,6 @@ router.get('/:userId/orderHistory', (req, res, next) => {
     User.findById(req.params.userId)
         .then(foundUser => {
             if (Number(req.session.passport.user) === Number(req.params.userId) && foundUser.dataValues.isAdmin) {
-                console.log('admin user');
                 Order.findAll({
                     include: [{ all: true }]
                 })
@@ -44,7 +43,6 @@ router.get('/:userId/orderHistory', (req, res, next) => {
                 .catch(next);
             }
             else if (Number(req.session.passport.user) === Number(req.params.userId)) {
-                console.log('reulgar user');
                 Order.findAll({
                     where: {
                         userId: Number(req.params.userId)

@@ -11,19 +11,27 @@ class productList extends Component{
     
     render(){
         return (
-            <div>    
+            <div className='productList'>
             {
-            this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
-                return (
-                <div key= {product.id}>
-                    <Link to={`/products/${product.id}`}>
-                    <li >
-                    {"Product Name: " + product.name + ' ' +"Product Price: " +product.price}
-                    </li>
-                    <img src={product.picture} />
-                    </Link>                
-                </div>)
-            })
+                this.props.listOfProducts.length && this.props.listOfProducts.map( product => {
+                    return (
+                    <div className='productList-product' key= {product.id}>
+                      <Link to={`/products/${product.id}`}>
+                        <div>
+                            <div>
+                                <span className='label'> Name: </span>
+                                <span> {product.name} </span>
+                            </div>
+                            <div>
+                                <span className='label'> Price: </span>
+                                <span> {product.price} </span>
+                            </div>
+                        </div>
+                        <img src={product.picture} />
+                      </Link>
+                     
+                    </div>)
+                })
             }
         </div>
         )

@@ -15,8 +15,8 @@ const Main = (props) => {
   const {children, handleClick, isLoggedIn, isAdmin,id,cart} = props
  
   return (
-    <div>
-      <h1>Drone Shop</h1>
+    <div className='main'>
+      <h1>! Drone Zone !</h1>
       <nav>
         {
           isLoggedIn
@@ -28,7 +28,8 @@ const Main = (props) => {
               <Link to="/home">Home</Link>
               <a href="#" onClick={(event) => handleClick(event, cart, id)}>Logout</a>
               <Link to ="/products">Products</Link>
-              <Link to="/cart" >Cart</Link>
+              <Link to="/orderHistory">Orders</Link>
+              <Link to="/cart">Cart</Link>
               <Link to="/userManagement"> Manage Users </Link>
                <Link to="/productManagement"> Manage Products </Link>
               </div>
@@ -37,6 +38,7 @@ const Main = (props) => {
               <Link to="/home">Home</Link>
               <a href="#" onClick={(event) => handleClick(event, cart, id)}>Logout</a>
               <Link to ="/products">Products</Link>
+              <Link to="/orderHistory">Orders</Link>
               <Link to="/cart">Cart</Link>
               </div> }
             </div>
@@ -61,7 +63,7 @@ const Main = (props) => {
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin,
+   isAdmin: state.user.isAdmin || false,
     cart: state.product.cart,
     id: state.user.id
   }
